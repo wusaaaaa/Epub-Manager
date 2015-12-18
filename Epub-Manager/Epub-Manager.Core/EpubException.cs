@@ -2,6 +2,7 @@
 
 namespace Epub_Manager.Core
 {
+    [Serializable]
     public class EpubException : Exception
     {
         public EpubException()
