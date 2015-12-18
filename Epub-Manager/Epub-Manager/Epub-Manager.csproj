@@ -55,6 +55,10 @@
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DevExpress.Data.v15.2, Version=15.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v15.2, Version=15.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Core.v15.2, Version=15.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpf.Ribbon.v15.2, Version=15.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
       <Private>True</Private>
@@ -65,6 +69,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.3.0.0-beta2\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -91,6 +97,32 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\DisposableAction.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\PropertyChangedBaseExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Services\ExceptionHandler.cs" />
+    <Compile Include="Services\LoadingService.cs" />
+    <Compile Include="Services\MessageManager.cs" />
+    <Compile Include="Views\Shell\IHaveRibbonToMerge.cs" />
+    <Compile Include="Views\Shell\IShellItem.cs" />
+    <Compile Include="Views\Shell\IViewWithLoading.cs" />
+    <Compile Include="Views\Shell\ShellView.xaml.cs">
+      <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Shell\ShellViewModel.cs" />
+    <Compile Include="Windows\EpubWindowManager.cs" />
+    <Compile Include="Windows\ExtendedDXRibbonWindow.cs" />
+    <Compile Include="Windows\WindowSettings.cs" />
+    <Compile Include="Windsor\ArrayInstaller.cs" />
+    <Compile Include="Windsor\CaliburnInstaller.cs" />
+    <Compile Include="Windsor\Facilities\EventRegistrationFacility.cs" />
+    <Compile Include="Windsor\Facilities\MakeEpubExceptionFacility.cs" />
+    <Compile Include="Windsor\Interceptors\CatchExceptionAttribute.cs" />
+    <Compile Include="Windsor\Interceptors\MakeEpubExceptionInterceptor.cs" />
+    <Compile Include="Windsor\ServiceInstaller.cs" />
+    <Compile Include="Windsor\ViewModelInstaller.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EpubBootstrapper.cs" />
@@ -120,6 +152,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Epub-Manager.Core\Epub-Manager.Core.csproj">
+      <Project>{86a07de2-35e0-4dca-a7a6-5469aad23058}</Project>
+      <Name>Epub-Manager.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\Shell\ShellView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
