@@ -9,5 +9,13 @@ namespace Epub_Manager.Views.MetaData
         {
             this.DisplayName = "MetaData";
         }
+
+        public void Save()
+        {
+        }
+
+        public void Cancel()
+        {
+        }
     }
 }
