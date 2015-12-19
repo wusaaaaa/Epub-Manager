@@ -210,3 +210,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/Epub-Manager/Epub-Manager/Views/Shell/ShellViewModel.cs
