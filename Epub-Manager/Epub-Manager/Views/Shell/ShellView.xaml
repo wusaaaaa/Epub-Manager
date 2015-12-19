@@ -8,11 +8,12 @@
              xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
              
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dxnav="http://schemas.devexpress.com/winfx/2008/xaml/navigation"
              mc:Ignorable="d" 
              
-             d:DesignHeight="300" 
-             d:DesignWidth="300"
+             d:DesignHeight="720" 
+             d:DesignWidth="1280"
              
              DataContextChanged="ShellViewOnDataContextChanged">
     <dxb:BarManager>
@@ -36,14 +37,43 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="5" />
                 </Grid.RowDefinitions>
-
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="400" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <ContentControl x:Name="TreeView" 
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Padding="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch" />
+                
                 <ContentControl x:Name="ActiveItem"
                                 Grid.Row="0"
+                                Grid.Column="1"
                                 Margin="5"
                                 HorizontalContentAlignment="Stretch"
                                 VerticalContentAlignment="Stretch" />
 
+                <dxnav:OfficeNavigationBar Grid.Row="1"
+                                           Grid.Column="0"
+                                           Grid.ColumnSpan="2"
+                                           ItemsSource="{Binding Items}"
+                                           SelectedItem="{Binding ActiveItem}"
+                                           DisplayMemberPath="DisplayName"
+                                           CustomizationButtonVisibility="Hidden">
+                    <dxnav:OfficeNavigationBar.ItemContainerStyle>
+                        <Style TargetType="dxnav:NavigationBarItem">
+                            <Setter Property="Padding"
+                                    Value="10, 0, 5, 0" />
+                        </Style>
+                    </dxnav:OfficeNavigationBar.ItemContainerStyle>
+                </dxnav:OfficeNavigationBar>
+                
                 <dx:WaitIndicator Grid.Row="0"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="2"
                                   Grid.RowSpan="3"
                                   x:Name="ActualWaitIndicator" />
             </Grid>
