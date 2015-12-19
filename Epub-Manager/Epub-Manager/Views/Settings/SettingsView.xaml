@@ -35,7 +35,9 @@
 
         <dxlc:LayoutControl Padding="0">
             <dxlc:LayoutGroup VerticalAlignment="Stretch"
-                              HorizontalAlignment="Stretch">
+                              HorizontalAlignment="Stretch"
+                              View="GroupBox"
+                              Header="Collection Settings">
                 <dxlc:LayoutItem Label="Folder path">
                     <dxe:ButtonEdit IsTextEditable="True"
                                     AllowDefaultButton="False"
