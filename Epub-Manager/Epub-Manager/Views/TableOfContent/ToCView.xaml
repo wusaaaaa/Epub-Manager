@@ -16,7 +16,7 @@
                           HorizontalAlignment="Stretch">
             <dxlc:LayoutItem VerticalAlignment="Stretch"
                              HorizontalAlignment="Stretch">
-                <ListBox ItemsSource="{Binding TableOfContent, UpdateSourceTrigger=PropertyChanged}"y/>
+                <ListBox ItemsSource="{Binding TableOfContent, UpdateSourceTrigger=PropertyChanged}" />
             </dxlc:LayoutItem>
         </dxlc:LayoutGroup>
     </dxlc:LayoutControl>
