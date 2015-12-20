@@ -105,10 +105,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common\DisposableAction.cs" />
+    <Compile Include="Extensions\ImageSourceExtension.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Extensions\PropertyChangedBaseExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Images\Resources.cs" />
     <Compile Include="Services\ExceptionHandler.cs" />
     <Compile Include="Services\LoadingService.cs" />
     <Compile Include="Services\MessageManager.cs" />
@@ -116,6 +118,10 @@
       <DependentUpon>EpubDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EpubData\EpubDataViewModel.cs" />
+    <Compile Include="Views\EpubData\Tree\FileTreeItemViewModel.cs" />
+    <Compile Include="Views\EpubData\Tree\FolderTreeItemViewModel.cs" />
+    <Compile Include="Views\EpubData\Tree\TreeItemSelected.cs" />
+    <Compile Include="Views\EpubData\Tree\TreeItemViewModel.cs" />
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -187,6 +193,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\File.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

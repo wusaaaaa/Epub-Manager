@@ -44,6 +44,37 @@
 
             <!--  TreeView -->
             <Grid Grid.Column="0">
+                <TreeView Name="Items"
+                          ItemsSource="{Binding TreeItems}">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded"
+                                    Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected"
+                                    Value="{Binding IsSelected, Mode=TwoWay}" />
+
+                            <EventSetter Event="Selected"
+                                         Handler="TreeItemOnSelected" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <StackPanel Orientation="Horizontal"
+                                        UseLayoutRounding="True"
+                                        Margin="0,0,0,5"
+                                        ToolTip="{Binding Description}">
+                                <Image Source="{Binding Image}"
+                                       Width="16"
+                                       Height="16"
+                                       RenderOptions.BitmapScalingMode="HighQuality" />
+                                <TextBlock Text="{Binding DisplayText}"
+                                           Margin="5,0,0,0" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+
+                </TreeView>
 
             </Grid>
 
@@ -57,16 +88,17 @@
                                       VerticalAlignment="Stretch"
                                       HorizontalAlignment="Stretch">
 
-                        <!-- Cover --> 
+                        <!-- Cover -->
                         <dxlc:LayoutGroup Header="Cover"
                                           Orientation="Vertical">
                             <dxlc:LayoutItem VerticalAlignment="Stretch"
                                              HorizontalAlignment="Stretch">
-                                <dxe:ImageEdit Source="{Binding Cover, Mode=TwoWay}" 
-                                               ShowMenu="False"/>
+                                <dxe:ImageEdit Source="{Binding Cover, Mode=TwoWay}"
+                                               ShowMenu="False"
+                                               IsReadOnly="True" />
                             </dxlc:LayoutItem>
                         </dxlc:LayoutGroup>
-                        
+
                         <!-- Meta data -->
                         <dxlc:LayoutGroup Header="Meta data"
                                           Orientation="Vertical">
@@ -116,13 +148,13 @@
                         <dxlc:LayoutGroup Header="Table of Content">
                             <dxlc:LayoutItem VerticalAlignment="Stretch"
                                              HorizontalAlignment="Stretch">
-                                <ListBox ItemsSource="{Binding ToC, Mode=OneWay}"/>
+                                <ListBox ItemsSource="{Binding ToC, Mode=OneWay}" />
                             </dxlc:LayoutItem>
                         </dxlc:LayoutGroup>
-                        
+
                     </dxlc:LayoutGroup>
-                    
-                    
+
+
                 </dxlc:LayoutControl>
             </Grid>
 

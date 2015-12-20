@@ -1,5 +1,6 @@
 ﻿using DevExpress.Xpf.Ribbon;
 using Epub_Manager.Views.Shell;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Epub_Manager.Views.EpubData
@@ -16,5 +17,9 @@ namespace Epub_Manager.Views.EpubData
             InitializeComponent();
         }
 
+        private void TreeItemOnSelected(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }
