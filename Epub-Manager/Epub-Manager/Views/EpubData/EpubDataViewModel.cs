@@ -12,6 +12,7 @@ namespace Epub_Manager.Views.EpubData
         #region Fields
 
         private BindableCollection<TreeItemViewModel> _treeItems;
+        private FileInfo _selectedEpub;
 
         #endregion
 
@@ -24,7 +25,6 @@ namespace Epub_Manager.Views.EpubData
             get { return this._treeItems; }
             set { this.SetProperty(ref this._treeItems, value); }
         }
-
         #endregion
 
         #region Ctor
@@ -59,12 +59,16 @@ namespace Epub_Manager.Views.EpubData
 
         private void BuildTree()
         {
+            this.TreeItems.Clear();
+
             var directory = new DirectoryInfo(this.FolderPath);
 
             var viewModel = IoC.Get<FolderTreeItemViewModel>();
             viewModel.Initialize(directory);
+            viewModel.IsExpanded = true;
 
             this.TreeItems.Add(viewModel);
+
 
             this.PopulateChildren(directory, viewModel);
         }

@@ -1,5 +1,4 @@
 ﻿using Caliburn.Micro;
-using Epub_Manager.Extensions;
 using Epub_Manager.Images;
 using System.IO;
 using System.Windows.Media;

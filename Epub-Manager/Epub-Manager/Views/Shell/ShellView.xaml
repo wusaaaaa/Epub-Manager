@@ -21,6 +21,7 @@
             <dxr:RibbonControl x:Name="ActualRibbonControl"
                                DockPanel.Dock="Top"
                                RibbonStyle="Office2010"
+                               AllowCustomization="False"
                                ToolbarShowMode="Hide"
                                ShowApplicationButton="False"
                                AllowMinimizeRibbon="False"
