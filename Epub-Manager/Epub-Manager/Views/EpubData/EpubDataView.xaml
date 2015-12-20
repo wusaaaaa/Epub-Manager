@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="Epub_Manager.Views.EpubData.EpubDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Epub_Manager.Views.EpubData"
+             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="500">
+
+    <DockPanel>
+
+        <dxr:RibbonControl x:Name="ActualRibbonControl"
+                           DockPanel.Dock="Top"
+                           RibbonStyle="Office2010"
+                           ToolbarShowMode="Hide"
+                           ShowApplicationButton="False"
+                           ToolbarShowCustomizationButton="False"
+                           MinimizationButtonVisibility="Collapsed">
+            <dxr:RibbonDefaultPageCategory>
+                <dxr:RibbonPage Caption="Start">
+                    <dxr:RibbonPageGroup Caption="MetaData">
+                        <dxb:BarButtonItem Content="Save"
+                                           LargeGlyph="{dx:DXImageOffice2013 Image=Save_32x32.png}"
+                                           Command="{Binding SaveCommand}" />
+                        <dxb:BarButtonItem Content="Cancel"
+                                           LargeGlyph="{dx:DXImage Image=Delete_32x32.png}"
+                                           Command="{Binding CancelCommand}" />
+                    </dxr:RibbonPageGroup>
+                </dxr:RibbonPage>
+            </dxr:RibbonDefaultPageCategory>
+        </dxr:RibbonControl>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--  TreeView -->
+            <Grid Grid.Column="0">
+
+            </Grid>
+
+            <!-- Tabs -->
+            <Grid Grid.Column="1">
+                <dxlc:LayoutControl Padding="0"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch">
+
+                    <dxlc:LayoutGroup View="Tabs"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch">
+
+                        <!-- Cover --> 
+                        <dxlc:LayoutGroup Header="Cover"
+                                          Orientation="Vertical">
+                            <dxlc:LayoutItem VerticalAlignment="Stretch"
+                                             HorizontalAlignment="Stretch">
+                                <dxe:ImageEdit Source="{Binding Cover, Mode=TwoWay}" 
+                                               ShowMenu="False"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        
+                        <!-- Meta data -->
+                        <dxlc:LayoutGroup Header="Meta data"
+                                          Orientation="Vertical">
+                            <dxlc:LayoutItem Label="Title">
+                                <dxe:TextEdit EditValue="{Binding Tilte, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Creator">
+                                <dxe:TextEdit EditValue="{Binding Creator.Creator, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="File as">
+                                <dxe:TextEdit EditValue="{Binding Creator.FileAs, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Role">
+                                <dxe:TextEdit EditValue="{Binding Creator.Role, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Description"
+                                             VerticalAlignment="Stretch">
+                                <dxe:TextEdit EditValue="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Publisher">
+                                <dxe:TextEdit EditValue="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Date">
+                                <dxe:TextEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Subject">
+                                <dxe:TextEdit EditValue="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Type">
+                                <dxe:TextEdit EditValue="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Format">
+                                <dxe:TextEdit EditValue="{Binding Format, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Identifier">
+                                <dxe:TextEdit EditValue="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Source">
+                                <dxe:TextEdit EditValue="{Binding Source, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                            <dxlc:LayoutItem Label="Language">
+                                <dxe:TextEdit EditValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}" />
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+
+                        <!-- Table of Content -->
+                        <dxlc:LayoutGroup Header="Table of Content">
+                            <dxlc:LayoutItem VerticalAlignment="Stretch"
+                                             HorizontalAlignment="Stretch">
+                                <ListBox ItemsSource="{Binding ToC, Mode=OneWay}"/>
+                            </dxlc:LayoutItem>
+                        </dxlc:LayoutGroup>
+                        
+                    </dxlc:LayoutGroup>
+                    
+                    
+                </dxlc:LayoutControl>
+            </Grid>
+
+        </Grid>
+
+    </DockPanel>
+</UserControl>

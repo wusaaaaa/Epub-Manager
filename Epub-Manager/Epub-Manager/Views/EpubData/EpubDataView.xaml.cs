@@ -2,19 +2,19 @@
 using Epub_Manager.Views.Shell;
 using System.Windows.Controls;
 
-namespace Epub_Manager.Views.MetaData
+namespace Epub_Manager.Views.EpubData
 {
     /// <summary>
-    /// Interaction logic for MetaDataView.xaml
+    /// Interaction logic for EpubDataView.xaml
     /// </summary>
-    public partial class MetaDataView : UserControl, IHaveRibbonToMerge
+    public partial class EpubDataView : UserControl, IHaveRibbonToMerge
     {
-        public MetaDataViewModel ViewModel => this.DataContext as MetaDataViewModel;
         public RibbonControl RibbonControl => this.ActualRibbonControl;
 
-        public MetaDataView()
+        public EpubDataView()
         {
             InitializeComponent();
         }
+
     }
 }

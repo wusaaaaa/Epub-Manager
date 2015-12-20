@@ -37,28 +37,14 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="5" />
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
 
-                <ContentControl x:Name="TreeView"
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Padding="0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch" />
-                
                 <ContentControl x:Name="ActiveItem"
                                 Grid.Row="0"
-                                Grid.Column="1"
                                 Margin="5"
                                 HorizontalContentAlignment="Stretch"
                                 VerticalContentAlignment="Stretch" />
 
                 <dxnav:OfficeNavigationBar Grid.Row="1"
-                                           Grid.Column="0"
-                                           Grid.ColumnSpan="2"
                                            ItemsSource="{Binding Items}"
                                            SelectedItem="{Binding ActiveItem}"
                                            DisplayMemberPath="DisplayName"
@@ -72,8 +58,6 @@
                 </dxnav:OfficeNavigationBar>
                 
                 <dx:WaitIndicator Grid.Row="0"
-                                  Grid.Column="0"
-                                  Grid.ColumnSpan="2"
                                   Grid.RowSpan="3"
                                   x:Name="ActualWaitIndicator" />
             </Grid>

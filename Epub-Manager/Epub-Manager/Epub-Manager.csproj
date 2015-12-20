@@ -112,11 +112,10 @@
     <Compile Include="Services\ExceptionHandler.cs" />
     <Compile Include="Services\LoadingService.cs" />
     <Compile Include="Services\MessageManager.cs" />
-    <Compile Include="Views\MetaData\MetaData.cs" />
-    <Compile Include="Views\MetaData\MetaDataView.xaml.cs">
-      <DependentUpon>MetaDataView.xaml</DependentUpon>
+    <Compile Include="Views\EpubData\EpubDataView.xaml.cs">
+      <DependentUpon>EpubDataView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MetaData\MetaDataViewModel.cs" />
+    <Compile Include="Views\EpubData\EpubDataViewModel.cs" />
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -128,10 +127,6 @@
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Shell\ShellViewModel.cs" />
-    <Compile Include="Views\TableOfContent\ToCView.xaml.cs">
-      <DependentUpon>ToCView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TableOfContent\ToCViewModel.cs" />
     <Compile Include="Windows\EpubWindowManager.cs" />
     <Compile Include="Windows\ExtendedDXRibbonWindow.cs" />
     <Compile Include="Windows\WindowSettings.cs" />
@@ -180,7 +175,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\MetaData\MetaDataView.xaml">
+    <Page Include="Views\EpubData\EpubDataView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,10 +184,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Shell\ShellView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TableOfContent\ToCView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
