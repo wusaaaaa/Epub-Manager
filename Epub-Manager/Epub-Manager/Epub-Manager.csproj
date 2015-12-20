@@ -120,6 +120,7 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\SettingsViewModel.cs" />
+    <Compile Include="Views\Shell\hellViewModel.cs" />
     <Compile Include="Views\Shell\IHaveRibbonToMerge.cs" />
     <Compile Include="Views\Shell\IShellItem.cs" />
     <Compile Include="Views\Shell\IViewWithLoading.cs" />
