@@ -1,7 +1,7 @@
 ﻿namespace Epub_Manager.Views.Shell
 {
-    public class hellViewModel
+    public class ShellViewModel
     {
-         
+
     }
 }
