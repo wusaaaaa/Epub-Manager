@@ -36,6 +36,18 @@ namespace Epub_Manager.Services
             return cover?.First();
         }
 
+        [CatchException("Error while loading the table of content")]
+        public FileInfo GetToC(DirectoryInfo file)
+        {
+            Guard.ArgumentNotNull(file, nameof(file));
+
+            var oebps = file.GetDirectories("OEBPS");
+
+            var toc = oebps?.First()?.GetFiles("toc.ncx");
+
+            return toc?.First();
+        }
+
         [CatchException("Error while removing the temporary file")]
         public void RemoveTempFile(FileInfo file)
         {

@@ -8,6 +8,9 @@ namespace Epub_Manager.Core.Services
 
         FileInfo GetCoverImage(DirectoryInfo file);
 
+        FileInfo GetToC(DirectoryInfo file);
+
         void RemoveTempFile(FileInfo file);
+
     }
 }
