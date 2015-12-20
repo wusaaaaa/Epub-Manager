@@ -90,7 +90,8 @@
                                       Orientation="Vertical">
                         <dxlc:LayoutItem VerticalAlignment="Stretch"
                                          HorizontalAlignment="Stretch">
-                            <dxe:ImageEdit Source="{Binding Cover, Mode=TwoWay}"
+                            <dxe:ImageEdit Source="{Binding CoverImage, Mode=TwoWay}"
+                                           
                                            ShowMenu="False"
                                            IsReadOnly="True" />
                         </dxlc:LayoutItem>

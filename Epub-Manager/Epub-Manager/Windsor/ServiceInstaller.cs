@@ -13,7 +13,8 @@ namespace Epub_Manager.Windsor
             container.Register(
                 Component.For<IExceptionHandler>().ImplementedBy<ExceptionHandler>().LifestyleSingleton(),
                 Component.For<ILoadingService>().ImplementedBy<LoadingService>().LifestyleSingleton(),
-                Component.For<IMessageManager>().ImplementedBy<MessageManager>().LifestyleSingleton()
+                Component.For<IMessageManager>().ImplementedBy<MessageManager>().LifestyleSingleton(),
+                Component.For<IEpubService>().ImplementedBy<EpubService>().LifestyleSingleton()
                 );
         }
     }
