@@ -160,9 +160,6 @@ namespace Epub_Manager.Views.EpubData
 
         public void Handle(TreeItemSelected message)
         {
-            if (this.File?.Name != this.TempFile?.Name)
-                this._epubService.RemoveTempFile(this.TempFile);
-
             if (message.TreeItem is FileTreeItemViewModel)
             {
                 var fileTree = (FileTreeItemViewModel)message.TreeItem;
