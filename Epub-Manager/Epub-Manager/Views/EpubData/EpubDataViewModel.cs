@@ -22,6 +22,7 @@ namespace Epub_Manager.Views.EpubData
         private BindableCollection<TreeItemViewModel> _treeItems;
         private ImageSource _coverImage;
         private FileInfo _file;
+        private DirectoryInfo _tempFile;
 
         #endregion
 
@@ -47,8 +48,14 @@ namespace Epub_Manager.Views.EpubData
             set
             {
                 if (this.SetProperty(ref this._file, value))
-                    this.fileChanged();
+                    this.FileChanged();
             }
+        }
+
+        public DirectoryInfo TempFile
+        {
+            get { return this._tempFile; }
+            set { this.SetProperty(ref this._tempFile, value); }
         }
 
         #endregion
@@ -73,7 +80,7 @@ namespace Epub_Manager.Views.EpubData
 
         #region Overrides
 
-        protected override void OnActivate()
+        protected override void OnInitialize()
         {
             var location = AppDomain.CurrentDomain.BaseDirectory + @"\Settings.ini";
 
@@ -85,30 +92,10 @@ namespace Epub_Manager.Views.EpubData
 
             this.BuildTree();
 
-            //this.GetCover(this.FileInfo);
+            //this.GetCover(this.File);
         }
 
-        //protected override void OnDeactivate(bool close)
-        //{
-        //    var dialogResult = this._messageManager.Show("Save Changes?", "Save", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
-        //    if (dialogResult == MessageBoxResult.Yes)
-        //    {
-        //        this.Save();
-        //        close = true;
-        //    }
-
-        //    else if (dialogResult == MessageBoxResult.Cancel)
-        //        close = false;
-
-        //    close = true;
-        //    this._epubService.RemoveTempFile(this.File);
-        //}
-
-        //private void Save()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         #endregion
 
@@ -167,27 +154,29 @@ namespace Epub_Manager.Views.EpubData
             this.CoverImage = new BitmapImage(new Uri(coverFile.FullName, UriKind.Absolute));
         }
 
-    #endregion
+        #endregion
 
-    #region Methods
+        #region Methods
 
-    public void Handle(TreeItemSelected message)
-    {
-        if (message.TreeItem is FileTreeItemViewModel)
+        public void Handle(TreeItemSelected message)
         {
-            var fileTree = (FileTreeItemViewModel)message.TreeItem;
+            if (this.File?.Name != this.TempFile?.Name)
+                this._epubService.RemoveTempFile(this.TempFile);
 
-            this.File = fileTree.File;
+            if (message.TreeItem is FileTreeItemViewModel)
+            {
+                var fileTree = (FileTreeItemViewModel)message.TreeItem;
+
+                this.File = fileTree.File;
+            }
         }
+
+        private void FileChanged()
+        {
+            this.TempFile = this._epubService.UnzipToTemporaryFile(this.File);
+            this.GetCover(this.TempFile);
+        }
+
+        #endregion
     }
-
-    private void fileChanged()
-    {
-        var result = this._epubService.UnzipToTemporaryFile(this.File);
-        this.GetCover(result);
-    }
-
-    #endregion
-
-}
 }

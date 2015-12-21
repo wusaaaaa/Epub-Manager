@@ -22,5 +22,11 @@ namespace Epub_Manager.Views.EpubData.Tree
         {
             this.File = fileInfo;
         }
+
+        protected override void OnIsSelected()
+        {
+            if (this.File.Extension.Equals(".epub"))
+                base.OnIsSelected();
+        }
     }
 }
