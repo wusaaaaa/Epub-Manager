@@ -6,19 +6,19 @@ using Epub_Manager.Views.EpubData.Tree;
 using Epub_Manager.Views.Shell;
 using System;
 using System.IO;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Epub_Manager.Views.EpubData
 {
-    public class EpubDataViewModel : Screen, IShellItem
+    public class EpubDataViewModel : Screen, IShellItem, IHandle<TreeItemSelected>
     {
 
         #region Fields
 
         private readonly IEpubService _epubService;
         private readonly IMessageManager _messageManager;
+        private readonly IEventAggregator _eventAggregator;
         private BindableCollection<TreeItemViewModel> _treeItems;
         private ImageSource _coverImage;
         private FileInfo _file;
@@ -44,22 +44,28 @@ namespace Epub_Manager.Views.EpubData
         public FileInfo File
         {
             get { return this._file; }
-            set { this.SetProperty(ref this._file, value); }
+            set
+            {
+                if (this.SetProperty(ref this._file, value))
+                    this.fileChanged();
+            }
         }
 
         #endregion
 
         #region Ctor
 
-        public EpubDataViewModel(IEpubService epubService, IMessageManager messageManager)
+        public EpubDataViewModel(IEpubService epubService, IMessageManager messageManager, IEventAggregator eventAggregator)
         {
             Guard.ArgumentNotNull(epubService, nameof(epubService));
             Guard.ArgumentNotNull(messageManager, nameof(messageManager));
 
             this._epubService = epubService;
             this._messageManager = messageManager;
+            this._eventAggregator = eventAggregator;
             this.DisplayName = "Epub Data";
 
+            this._eventAggregator.Subscribe(this);
             this.TreeItems = new BindableCollection<TreeItemViewModel>();
         }
 
@@ -82,27 +88,27 @@ namespace Epub_Manager.Views.EpubData
             //this.GetCover(this.FileInfo);
         }
 
-        protected override void OnDeactivate(bool close)
-        {
-            var dialogResult = this._messageManager.Show("Save Changes?", "Save", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+        //protected override void OnDeactivate(bool close)
+        //{
+        //    var dialogResult = this._messageManager.Show("Save Changes?", "Save", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
 
-            if (dialogResult == MessageBoxResult.Yes)
-            {
-                this.Save();
-                close = true;
-            }
+        //    if (dialogResult == MessageBoxResult.Yes)
+        //    {
+        //        this.Save();
+        //        close = true;
+        //    }
 
-            else if (dialogResult == MessageBoxResult.Cancel)
-                close = false;
+        //    else if (dialogResult == MessageBoxResult.Cancel)
+        //        close = false;
 
-            close = true;
-            this._epubService.RemoveTempFile(this.File);
-        }
+        //    close = true;
+        //    this._epubService.RemoveTempFile(this.File);
+        //}
 
-        private void Save()
-        {
-            throw new NotImplementedException();
-        }
+        //private void Save()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         #endregion
 
@@ -137,13 +143,13 @@ namespace Epub_Manager.Views.EpubData
 
                 this.PopulateChildren(directory, viewModel);
 
-                foreach (var fileInfo in directory.GetFiles())
-                {
-                    var childViewModel = IoC.Get<FileTreeItemViewModel>();
-                    childViewModel.Initialize(fileInfo);
+            }
+            foreach (var fileInfo in directoryInfo.GetFiles())
+            {
+                var childViewModel = IoC.Get<FileTreeItemViewModel>();
+                childViewModel.Initialize(fileInfo);
 
-                    viewModel.Children.Add(childViewModel);
-                }
+                parent.Children.Add(childViewModel);
             }
 
         }
@@ -152,18 +158,36 @@ namespace Epub_Manager.Views.EpubData
 
         #region Cover
 
-        private void GetCover(FileInfo file)
+        private void GetCover(DirectoryInfo info)
         {
-            Guard.ArgumentNotNull(file, nameof(file));
+            Guard.ArgumentNotNull(info, nameof(info));
 
-            if (file.DirectoryName != null)
-            {
-                var coverFile = this._epubService.GetCoverImage(new DirectoryInfo(file.DirectoryName));
+            var coverFile = this._epubService.GetCoverImage(info);
 
-                this.CoverImage = new BitmapImage(new Uri(coverFile.FullName, UriKind.Relative));
-            }
+            this.CoverImage = new BitmapImage(new Uri(coverFile.FullName, UriKind.Absolute));
         }
 
-        #endregion
+    #endregion
+
+    #region Methods
+
+    public void Handle(TreeItemSelected message)
+    {
+        if (message.TreeItem is FileTreeItemViewModel)
+        {
+            var fileTree = (FileTreeItemViewModel)message.TreeItem;
+
+            this.File = fileTree.File;
+        }
     }
+
+    private void fileChanged()
+    {
+        var result = this._epubService.UnzipToTemporaryFile(this.File);
+        this.GetCover(result);
+    }
+
+    #endregion
+
+}
 }

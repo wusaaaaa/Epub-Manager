@@ -80,79 +80,78 @@
             </dxlc:LayoutItem>
 
             <!-- Tabs -->
-            <dxlc:LayoutItem>
-                <dxlc:LayoutGroup View="Tabs"
+            <dxlc:LayoutGroup View="Tabs"
                                   VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch">
 
-                    <!-- Cover -->
-                    <dxlc:LayoutGroup Header="Cover"
+                <!-- Cover -->
+                <dxlc:LayoutGroup Header="Cover"
                                       Orientation="Vertical">
-                        <dxlc:LayoutItem VerticalAlignment="Stretch"
+                    <dxlc:LayoutItem VerticalAlignment="Stretch"
                                          HorizontalAlignment="Stretch">
-                            <dxe:ImageEdit Source="{Binding CoverImage, Mode=TwoWay}"
-                                           
+                        <dxe:ImageEdit Source="{Binding CoverImage, Mode=TwoWay}"
+                                           VerticalAlignment="Stretch"
+                                           HorizontalAlignment="Stretch"
                                            ShowMenu="False"
                                            IsReadOnly="True" />
-                        </dxlc:LayoutItem>
-                    </dxlc:LayoutGroup>
-
-                    <!-- Meta data -->
-                    <dxlc:LayoutGroup Header="Meta data"
-                                      Orientation="Vertical">
-                        <dxlc:LayoutItem Label="Title">
-                            <dxe:TextEdit EditValue="{Binding Tilte, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Creator">
-                            <dxe:TextEdit EditValue="{Binding Creator.Creator, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="File as">
-                            <dxe:TextEdit EditValue="{Binding Creator.FileAs, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Role">
-                            <dxe:TextEdit EditValue="{Binding Creator.Role, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Description"
-                                         VerticalAlignment="Stretch">
-                            <dxe:TextEdit EditValue="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Publisher">
-                            <dxe:TextEdit EditValue="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Date">
-                            <dxe:TextEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Subject">
-                            <dxe:TextEdit EditValue="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Type">
-                            <dxe:TextEdit EditValue="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Format">
-                            <dxe:TextEdit EditValue="{Binding Format, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Identifier">
-                            <dxe:TextEdit EditValue="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Source">
-                            <dxe:TextEdit EditValue="{Binding Source, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Language">
-                            <dxe:TextEdit EditValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}" />
-                        </dxlc:LayoutItem>
-                    </dxlc:LayoutGroup>
-
-                    <!-- Table of Content -->
-                    <dxlc:LayoutGroup Header="Table of Content">
-                        <dxlc:LayoutItem VerticalAlignment="Stretch"
-                                         HorizontalAlignment="Stretch">
-                            <ListBox ItemsSource="{Binding ToC, Mode=OneWay}" />
-                        </dxlc:LayoutItem>
-                    </dxlc:LayoutGroup>
-
+                    </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
 
-            </dxlc:LayoutItem>
+                <!-- Meta data -->
+                <dxlc:LayoutGroup Header="Meta data"
+                                      Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Title">
+                        <dxe:TextEdit EditValue="{Binding Tilte, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Creator">
+                        <dxe:TextEdit EditValue="{Binding Creator.Creator, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="File as">
+                        <dxe:TextEdit EditValue="{Binding Creator.FileAs, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Role">
+                        <dxe:TextEdit EditValue="{Binding Creator.Role, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Description"
+                                         VerticalAlignment="Stretch">
+                        <dxe:TextEdit EditValue="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Publisher">
+                        <dxe:TextEdit EditValue="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Date">
+                        <dxe:TextEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Subject">
+                        <dxe:TextEdit EditValue="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Type">
+                        <dxe:TextEdit EditValue="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Format">
+                        <dxe:TextEdit EditValue="{Binding Format, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Identifier">
+                        <dxe:TextEdit EditValue="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Source">
+                        <dxe:TextEdit EditValue="{Binding Source, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Language">
+                        <dxe:TextEdit EditValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+
+                <!-- Table of Content -->
+                <dxlc:LayoutGroup Header="Table of Content">
+                    <dxlc:LayoutItem VerticalAlignment="Stretch"
+                                         HorizontalAlignment="Stretch">
+                        <ListBox ItemsSource="{Binding ToC, Mode=OneWay}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+
+            </dxlc:LayoutGroup>
+
 
         </dxlc:LayoutControl>
 

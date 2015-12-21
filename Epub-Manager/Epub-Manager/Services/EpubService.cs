@@ -17,7 +17,7 @@ namespace Epub_Manager.Services
 
             var tempFile = Path.GetTempFileName() + Guid.NewGuid();
 
-            ZipFile.ExtractToDirectory(file.DirectoryName, tempFile);
+            ZipFile.ExtractToDirectory(file.FullName, tempFile);
 
             return new DirectoryInfo(tempFile);
         }
