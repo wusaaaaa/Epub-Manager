@@ -1,16 +1,15 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace Epub_Manager.Core.Services
 {
     public interface IEpubService
     {
-        DirectoryInfo UnzipToTemporaryFile(FileInfo file);
+        BitmapImage GetCoverImage(FileInfo file);
 
-        FileInfo GetCoverImage(DirectoryInfo file);
+        List<string> GetToC(FileInfo file);
 
-        FileInfo GetToC(DirectoryInfo file);
-
-        void RemoveTempFile(FileInfo file);
-
+        MetaDataViewModel GetMetaData(FileInfo file);
     }
 }

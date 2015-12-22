@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Utils;
+using Epub_Manager.Core;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
 using Epub_Manager.Views.EpubData.Tree;
@@ -7,13 +8,11 @@ using Epub_Manager.Views.Shell;
 using System;
 using System.IO;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Epub_Manager.Views.EpubData
 {
     public class EpubDataViewModel : Screen, IShellItem, IHandle<TreeItemSelected>
     {
-
         #region Fields
 
         private readonly IEpubService _epubService;
@@ -23,6 +22,8 @@ namespace Epub_Manager.Views.EpubData
         private ImageSource _coverImage;
         private FileInfo _file;
         private DirectoryInfo _tempFile;
+        private BindableCollection<string> _toC;
+        private MetaDataViewModel _metaData;
 
         #endregion
 
@@ -52,10 +53,16 @@ namespace Epub_Manager.Views.EpubData
             }
         }
 
-        public DirectoryInfo TempFile
+        public BindableCollection<string> ToC
         {
-            get { return this._tempFile; }
-            set { this.SetProperty(ref this._tempFile, value); }
+            get { return this._toC; }
+            set { this.SetProperty(ref this._toC, value); }
+        }
+
+        public MetaDataViewModel MetaData
+        {
+            get { return this._metaData; }
+            set { this.SetProperty(ref this._metaData, value); }
         }
 
         #endregion
@@ -74,6 +81,7 @@ namespace Epub_Manager.Views.EpubData
 
             this._eventAggregator.Subscribe(this);
             this.TreeItems = new BindableCollection<TreeItemViewModel>();
+            this.ToC = new BindableCollection<string>();
         }
 
         #endregion
@@ -145,13 +153,55 @@ namespace Epub_Manager.Views.EpubData
 
         #region Cover
 
-        private void GetCover(DirectoryInfo info)
+        private void GetCover(FileInfo info)
         {
             Guard.ArgumentNotNull(info, nameof(info));
 
+            this.CoverImage = null;
+
             var coverFile = this._epubService.GetCoverImage(info);
 
-            this.CoverImage = new BitmapImage(new Uri(coverFile.FullName, UriKind.Absolute));
+            if (coverFile == null)
+                return;
+
+            this.CoverImage = coverFile;
+        }
+
+        #endregion
+
+        #region MetaData
+
+        private void GetMetaData(FileInfo file)
+        {
+            Guard.ArgumentNotNull(file, nameof(file));
+
+            this.MetaData = null;
+
+            var result = this._epubService.GetMetaData(file);
+
+            if (result == null)
+                return;
+
+            this.MetaData = result;
+        }
+
+        #endregion
+
+
+        #region ToC
+
+        private void GetToC(FileInfo info)
+        {
+            Guard.ArgumentNotNull(info, nameof(info));
+
+            this.ToC.Clear();
+
+            var toc = this._epubService.GetToC(info);
+
+            if (toc == null)
+                return;
+
+            this.ToC.AddRange(toc);
         }
 
         #endregion
@@ -170,10 +220,12 @@ namespace Epub_Manager.Views.EpubData
 
         private void FileChanged()
         {
-            this.TempFile = this._epubService.UnzipToTemporaryFile(this.File);
-            this.GetCover(this.TempFile);
+            this.GetCover(this.File);
+            this.GetToC(this.File);
+            this.GetMetaData(this.File);
         }
 
         #endregion
+
     }
 }

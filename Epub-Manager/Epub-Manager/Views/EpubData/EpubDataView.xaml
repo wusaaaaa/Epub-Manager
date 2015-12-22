@@ -101,44 +101,44 @@
                 <dxlc:LayoutGroup Header="Meta data"
                                       Orientation="Vertical">
                     <dxlc:LayoutItem Label="Title">
-                        <dxe:TextEdit EditValue="{Binding Tilte, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Title, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Creator">
-                        <dxe:TextEdit EditValue="{Binding Creator.Creator, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.Creator, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="File as">
-                        <dxe:TextEdit EditValue="{Binding Creator.FileAs, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.FileAs, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Role">
-                        <dxe:TextEdit EditValue="{Binding Creator.Role, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.Role, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Description"
                                          VerticalAlignment="Stretch">
-                        <dxe:TextEdit EditValue="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Description, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Publisher">
-                        <dxe:TextEdit EditValue="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Publisher, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Date">
-                        <dxe:TextEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Date, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Subject">
-                        <dxe:TextEdit EditValue="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Subject, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Type">
-                        <dxe:TextEdit EditValue="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Type, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Format">
-                        <dxe:TextEdit EditValue="{Binding Format, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Format, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Identifier">
-                        <dxe:TextEdit EditValue="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Identifier, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Source">
-                        <dxe:TextEdit EditValue="{Binding Source, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Source, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Language">
-                        <dxe:TextEdit EditValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:TextEdit EditValue="{Binding MetaData.Language, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
 
