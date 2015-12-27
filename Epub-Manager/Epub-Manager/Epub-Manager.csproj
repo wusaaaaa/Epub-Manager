@@ -108,7 +108,6 @@
     </Compile>
     <Compile Include="Common\DisposableAction.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
-    <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\PropertyChangedBaseExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
