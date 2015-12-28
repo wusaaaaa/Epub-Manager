@@ -21,9 +21,8 @@ namespace Epub_Manager.Views.EpubData
         private BindableCollection<TreeItemViewModel> _treeItems;
         private ImageSource _coverImage;
         private FileInfo _file;
-        private DirectoryInfo _tempFile;
-        private BindableCollection<string> _toC;
-        private MetaDataViewModel _metaData;
+        private BindableCollection<TableOfContentEntry> _toC;
+        private MetaData _metaData;
 
         #endregion
 
@@ -53,13 +52,13 @@ namespace Epub_Manager.Views.EpubData
             }
         }
 
-        public BindableCollection<string> ToC
+        public BindableCollection<TableOfContentEntry> ToC
         {
             get { return this._toC; }
             set { this.SetProperty(ref this._toC, value); }
         }
 
-        public MetaDataViewModel MetaData
+        public MetaData MetaData
         {
             get { return this._metaData; }
             set { this.SetProperty(ref this._metaData, value); }
@@ -83,12 +82,12 @@ namespace Epub_Manager.Views.EpubData
 
             this._eventAggregator.Subscribe(this);
             this.TreeItems = new BindableCollection<TreeItemViewModel>();
-            this.ToC = new BindableCollection<string>();
+            this.ToC = new BindableCollection<TableOfContentEntry>();
         }
 
         #endregion
 
-        #region Overrides
+        #region Lifecycle
 
         protected override void OnActivate()
         {
@@ -206,7 +205,7 @@ namespace Epub_Manager.Views.EpubData
                 if (toc == null)
                     return;
 
-                this.ToC.AddRange(toc);
+                this.ToC.Add(toc);
             }
             catch (EpubException ex)
             {

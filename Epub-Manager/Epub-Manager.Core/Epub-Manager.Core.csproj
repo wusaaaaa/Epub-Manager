@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EpubException.cs" />
-    <Compile Include="MetaDataViewModel.cs" />
+    <Compile Include="MetaData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IEpubService.cs" />
     <Compile Include="Services\IExceptionHandler.cs" />

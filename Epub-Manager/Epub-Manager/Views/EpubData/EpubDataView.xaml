@@ -103,8 +103,8 @@
                     <dxlc:LayoutItem Label="Title">
                         <dxe:TextEdit EditValue="{Binding MetaData.Title, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Creator">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.Creator, UpdateSourceTrigger=PropertyChanged}" />
+                    <dxlc:LayoutItem Label="CreatorName">
+                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.CreatorName, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="File as">
                         <dxe:TextEdit EditValue="{Binding MetaData.Creator.FileAs, UpdateSourceTrigger=PropertyChanged}" />
@@ -146,7 +146,19 @@
                 <dxlc:LayoutGroup Header="Table of Content">
                     <dxlc:LayoutItem VerticalAlignment="Stretch"
                                          HorizontalAlignment="Stretch">
-                        <ListBox ItemsSource="{Binding ToC, Mode=OneWay}" />
+                        <TreeView ItemsSource="{Binding ToC, Mode=OneWay}">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding SubEntries}">
+                                    <TextBlock Text="{Binding Name}"/>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem">
+                                    <Setter Property="IsExpanded"
+                                            Value="True"/>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                        </TreeView>
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
 

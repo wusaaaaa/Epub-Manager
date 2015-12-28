@@ -8,14 +8,12 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace Epub_Manager.Services
 {
     public class EpubService : IEpubService
     {
-
         [CatchException("Error while getting the cover image")]
         public BitmapImage GetCoverImage(FileInfo file)
         {
@@ -30,7 +28,7 @@ namespace Epub_Manager.Services
                 if (coverFileName == null)
                     throw new EpubException("No cover file exists.");
 
-                var validFileEndings = new string[] { ".jpg", ".jpeg" };
+                var validFileEndings = new[] { ".jpg", ".jpeg" };
 
                 var entry = archive.Entries.FirstOrDefault(f => f.Name.StartsWith(coverFileName) && validFileEndings.Any(d => f.Name.EndsWith(d)));
 
@@ -51,7 +49,7 @@ namespace Epub_Manager.Services
         }
 
         [CatchException("Error while loading the table of content")]
-        public List<string> GetToC(FileInfo file)
+        public TableOfContentEntry GetToC(FileInfo file)
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
@@ -59,28 +57,30 @@ namespace Epub_Manager.Services
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
             {
                 var tocEntry = archive.Entries.FirstOrDefault(f => f.Name.EndsWith(".ncx"));
-                if(tocEntry == null)
+                if (tocEntry == null)
                     throw new EpubException("No table of content found.");
                 
-                using (var entryStream = tocEntry.Open())
-                using (var xmlReader = new XmlTextReader(entryStream))
+                using (var tocStream  = tocEntry.Open())
+                using (var streamReader = new StreamReader(tocStream, Encoding.UTF8))
                 {
-                    var toc = new List<string>();
-                    while (xmlReader.Read())
+                    var tocXmlDocument = XDocument.Load(streamReader);
+
+                    var docTitle = tocXmlDocument?.Root?.Elements().FirstOrDefault(f => f.Name.LocalName == "docTitle")?.Elements().FirstOrDefault(f => f.Name.LocalName == "text")?.Value;
+
+                    var navMapNode = tocXmlDocument?.Root?.Elements().FirstOrDefault(f => f.Name.LocalName == "navMap");
+                    var tocEntries = this.ReadTableOfContent(navMapNode);
+
+                    return new TableOfContentEntry
                     {
-                        if (xmlReader.Name != "text")
-                            continue;
-
-                        toc.Add(xmlReader.ReadString());
-                    }
-
-                    return toc;
+                        Name = docTitle,
+                        SubEntries = tocEntries
+                    };
                 }
             }
         }
-
+        
         [CatchException("Error while loading the meta data")]
-        public MetaDataViewModel GetMetaData(FileInfo file)
+        public MetaData GetMetaData(FileInfo file)
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
@@ -90,13 +90,13 @@ namespace Epub_Manager.Services
             {
                 var doc = this.GetOPF(archive);
 
-                var metata = new MetaDataViewModel
+                var metata = new MetaData
                 {
                     Title = this.TryGetNodeContent(doc, "title"),
                     Identifier = this.TryGetNodeContent(doc, "identifier"),
-                    Creator = new CreatorViewModel
+                    Creator = new Creator
                     {
-                        Creator = this.TryGetNodeContent(doc, "creator"),
+                        CreatorName = this.TryGetNodeContent(doc, "creator"),
                         FileAs = this.TryGetAttributeContent(doc, "creator", "file-as"),
                         Role = this.TryGetAttributeContent(doc, "creator", "role")
                     },
@@ -119,6 +119,40 @@ namespace Epub_Manager.Services
 
             return null;
         }
+
+        [CatchException("Error while loading the images in the epub")]
+        public List<BitmapImage> GetAllImages(FileInfo file)
+        {
+            Guard.ArgumentNotNull(file, nameof(file));
+
+            using (var stream = File.Open(file.FullName, FileMode.Open, FileAccess.ReadWrite))
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
+            {
+                var validFileEndings = new[] {".jpg", ".jpeg"};
+
+                var images = archive.Entries.Where(f => validFileEndings.Any(d => f.Name.EndsWith(d))).ToList();
+
+                var returnList = new List<BitmapImage>();
+
+                foreach (var zipArchiveEntry in images)
+                {
+                    using (var entryStream = zipArchiveEntry.Open())
+                    {
+                        var image = new BitmapImage();
+                        image.BeginInit();
+                        image.CacheOption = BitmapCacheOption.OnLoad;
+                        image.StreamSource = entryStream;
+                        image.EndInit();
+
+                        returnList.Add(image);
+                    }
+                }
+
+                return returnList;
+            }
+        }
+
+        #region Private Methods
 
         private string TryGetNodeContent(XDocument document, string name, string attributeToFilter = null, string expectedValue = null)
         {
@@ -161,5 +195,26 @@ namespace Epub_Manager.Services
             }
             throw new EpubException("No content found.");
         }
+
+        private List<TableOfContentEntry> ReadTableOfContent(XElement node)
+        {
+            var result = new List<TableOfContentEntry>();
+
+            foreach (var navPoint in node.Elements().Where(f => f.Name.LocalName == "navPoint"))
+            {
+                var text = navPoint.Elements().FirstOrDefault(f => f.Name.LocalName == "navLabel")?.Elements().FirstOrDefault(f => f.Name.LocalName == "text")?.Value;
+                var subEntries = this.ReadTableOfContent(navPoint);
+
+                result.Add(new TableOfContentEntry
+                {
+                    Name = text,
+                    SubEntries = subEntries
+                });
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }

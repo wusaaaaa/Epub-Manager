@@ -8,8 +8,10 @@ namespace Epub_Manager.Core.Services
     {
         BitmapImage GetCoverImage(FileInfo file);
 
-        List<string> GetToC(FileInfo file);
+        TableOfContentEntry GetToC(FileInfo file);
 
-        MetaDataViewModel GetMetaData(FileInfo file);
+        MetaData GetMetaData(FileInfo file);
+
+        List<BitmapImage> GetAllImages(FileInfo file);
     }
 }

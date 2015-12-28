@@ -1,10 +1,18 @@
-﻿namespace Epub_Manager.Core
+﻿using System.Collections.Generic;
+
+namespace Epub_Manager.Core
 {
-    public class MetaDataViewModel
+    public class TableOfContentEntry
+    {
+        public string Name { get; set; }
+        public List<TableOfContentEntry> SubEntries { get; set; }
+    }
+
+    public class MetaData
     {
         public string Title { get; set; }
 
-        public CreatorViewModel Creator { get; set; }
+        public Creator Creator { get; set; }
 
         public string Description { get; set; }
 
@@ -25,9 +33,9 @@
         public string Language { get; set; }
     }
 
-    public class CreatorViewModel
+    public class Creator
     {
-        public string Creator { get; set; }
+        public string CreatorName { get; set; }
 
         public string FileAs { get; set; }
 
