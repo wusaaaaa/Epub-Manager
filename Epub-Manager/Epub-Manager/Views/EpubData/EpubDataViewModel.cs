@@ -16,8 +16,8 @@ namespace Epub_Manager.Views.EpubData
         #region Fields
 
         private readonly IEpubService _epubService;
-        private readonly IMessageManager _messageManager;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IExceptionHandler _exceptionHandler;
         private BindableCollection<TreeItemViewModel> _treeItems;
         private ImageSource _coverImage;
         private FileInfo _file;
@@ -69,14 +69,16 @@ namespace Epub_Manager.Views.EpubData
 
         #region Ctor
 
-        public EpubDataViewModel(IEpubService epubService, IMessageManager messageManager, IEventAggregator eventAggregator)
+        public EpubDataViewModel(IEpubService epubService, IEventAggregator eventAggregator, IExceptionHandler exceptionHandler)
         {
             Guard.ArgumentNotNull(epubService, nameof(epubService));
-            Guard.ArgumentNotNull(messageManager, nameof(messageManager));
+            Guard.ArgumentNotNull(eventAggregator, nameof(eventAggregator));
+            Guard.ArgumentNotNull(exceptionHandler, nameof(exceptionHandler));
 
             this._epubService = epubService;
-            this._messageManager = messageManager;
             this._eventAggregator = eventAggregator;
+            this._exceptionHandler = exceptionHandler;
+
             this.DisplayName = "Epub Data";
 
             this._eventAggregator.Subscribe(this);
@@ -100,6 +102,7 @@ namespace Epub_Manager.Views.EpubData
 
             this.BuildTree();
         }
+
 
         #endregion
 
@@ -147,62 +150,69 @@ namespace Epub_Manager.Views.EpubData
 
         #endregion
 
-        #region Cover
-
+        #region Methods
         private void GetCover(FileInfo info)
         {
             Guard.ArgumentNotNull(info, nameof(info));
 
-            this.CoverImage = null;
+            try
+            {
+                this.CoverImage = null;
 
-            var coverFile = this._epubService.GetCoverImage(info);
+                var coverFile = this._epubService.GetCoverImage(info);
 
-            if (coverFile == null)
-                return;
+                if (coverFile == null)
+                    return;
 
-            this.CoverImage = coverFile;
+                this.CoverImage = coverFile;
+            }
+            catch (EpubException ex)
+            {
+                this._exceptionHandler.Handle(ex);
+            }
         }
-
-        #endregion
-
-        #region MetaData
 
         private void GetMetaData(FileInfo file)
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
-            this.MetaData = null;
+            try
+            {
+                this.MetaData = null;
 
-            var result = this._epubService.GetMetaData(file);
+                var result = this._epubService.GetMetaData(file);
 
-            if (result == null)
-                return;
+                if (result == null)
+                    return;
 
-            this.MetaData = result;
+                this.MetaData = result;
+            }
+            catch (EpubException ex)
+            {
+                this._exceptionHandler.Handle(ex);
+            }
         }
-
-        #endregion
-
-
-        #region ToC
 
         private void GetToC(FileInfo info)
         {
             Guard.ArgumentNotNull(info, nameof(info));
 
-            this.ToC.Clear();
+            try
+            {
+                this.ToC.Clear();
 
-            var toc = this._epubService.GetToC(info);
+                var toc = this._epubService.GetToC(info);
 
-            if (toc == null)
-                return;
+                if (toc == null)
+                    return;
 
-            this.ToC.AddRange(toc);
+                this.ToC.AddRange(toc);
+            }
+            catch (EpubException ex)
+            {
+                this._exceptionHandler.Handle(ex);
+            }
         }
-
-        #endregion
-
-        #region Methods
 
         public void Handle(TreeItemSelected message)
         {
