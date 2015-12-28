@@ -88,7 +88,7 @@ namespace Epub_Manager.Views.EpubData
 
         #region Overrides
 
-        protected override void OnInitialize()
+        protected override void OnActivate()
         {
             var location = AppDomain.CurrentDomain.BaseDirectory + @"\Settings.ini";
 
@@ -99,11 +99,7 @@ namespace Epub_Manager.Views.EpubData
                 this.FolderPath = reader.ReadLineAsync().Result;
 
             this.BuildTree();
-
-            //this.GetCover(this.File);
         }
-
-
 
         #endregion
 

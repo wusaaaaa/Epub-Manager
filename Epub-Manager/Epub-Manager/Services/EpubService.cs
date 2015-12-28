@@ -24,23 +24,30 @@ namespace Epub_Manager.Services
             using (var stream = File.Open(file.FullName, FileMode.Open, FileAccess.ReadWrite))
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
             {
-                foreach (var zipArchiveEntry in archive.Entries)
-                {
-                    if (zipArchiveEntry.Name.Equals("Cover.jpg"))
-                        using (var entryStream = zipArchiveEntry.Open())
-                        {
-                            var image = new BitmapImage();
-                            image.BeginInit();
-                            image.CacheOption = BitmapCacheOption.OnLoad;
-                            image.StreamSource = entryStream;
-                            image.EndInit();
+                var opf = this.GetOPF(archive);
 
-                            return image;
-                        }
+                var coverFileName = this.GetCoverFileName(opf);
+                if (coverFileName == null)
+                    throw new EpubException("No cover file exists.");
+
+                var validFileEndings = new string[] { ".jpg", ".jpeg" };
+
+                var entry = archive.Entries.FirstOrDefault(f => f.Name.StartsWith(coverFileName) && validFileEndings.Any(d => f.Name.EndsWith(d)));
+
+                if (entry == null)
+                    throw new EpubException("Cover not found.");
+
+                using (var entryStream = entry.Open())
+                {
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.StreamSource = entryStream;
+                    image.EndInit();
+
+                    return image;
                 }
             }
-
-            return null;
         }
 
         [CatchException("Error while loading the table of content")]
@@ -48,32 +55,28 @@ namespace Epub_Manager.Services
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
-
             using (var stream = File.Open(file.FullName, FileMode.Open, FileAccess.ReadWrite))
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
             {
-                foreach (var zipArchiveEntry in archive.Entries)
+                var tocEntry = archive.Entries.FirstOrDefault(f => f.Name.EndsWith(".ncx"));
+                if(tocEntry == null)
+                    throw new EpubException("No table of content found.");
+                
+                using (var entryStream = tocEntry.Open())
+                using (var xmlReader = new XmlTextReader(entryStream))
                 {
-                    if (zipArchiveEntry.Name.EndsWith(".ncx"))
-                        using (var entryStream = zipArchiveEntry.Open())
-                        using (var xmlReader = new XmlTextReader(entryStream))
-                        {
-                            var toc = new List<string>();
-                            while (xmlReader.Read())
-                            {
-                                if (xmlReader.Name != "text")
-                                    continue;
+                    var toc = new List<string>();
+                    while (xmlReader.Read())
+                    {
+                        if (xmlReader.Name != "text")
+                            continue;
 
-                                toc.Add(xmlReader.ReadString());
-                            }
+                        toc.Add(xmlReader.ReadString());
+                    }
 
-                            return toc;
-                        }
+                    return toc;
                 }
-
             }
-
-            return null;
         }
 
         [CatchException("Error while loading the meta data")]
@@ -85,38 +88,32 @@ namespace Epub_Manager.Services
             using (var stream = File.Open(file.FullName, FileMode.Open, FileAccess.ReadWrite))
             using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
             {
-                foreach (var zipArchiveEntry in archive.Entries)
+                var doc = this.GetOPF(archive);
+
+                var metata = new MetaDataViewModel
                 {
-                    if (zipArchiveEntry.Name.EndsWith(".opf"))
-                        using (var entryStream = zipArchiveEntry.Open())
-                        using (var streamReader = new StreamReader(entryStream, Encoding.UTF8))
-                        {
-                            var doc = XDocument.Parse(streamReader.ReadToEnd());
+                    Title = this.TryGetNodeContent(doc, "title"),
+                    Identifier = this.TryGetNodeContent(doc, "identifier"),
+                    Creator = new CreatorViewModel
+                    {
+                        Creator = this.TryGetNodeContent(doc, "creator"),
+                        FileAs = this.TryGetAttributeContent(doc, "creator", "file-as"),
+                        Role = this.TryGetAttributeContent(doc, "creator", "role")
+                    },
+                    Date = this.TryGetNodeContent(doc, "date", "event", "creation"),
+                    Source = this.TryGetNodeContent(doc, "source"),
+                    Description = this.TryGetNodeContent(doc, "description"),
+                    Format = this.TryGetNodeContent(doc, "format"),
+                    Language = this.TryGetNodeContent(doc, "language"),
+                    Publisher = this.TryGetNodeContent(doc, "publisher"),
+                    Subject = this.TryGetNodeContent(doc, "subject"),
+                    Type = this.TryGetNodeContent(doc, "type")
 
-                            var metata = new MetaDataViewModel
-                            {
-                                Title = this.TryGetNodeContent(doc, "title"),
-                                Identifier = this.TryGetNodeContent(doc, "identifier"),
-                                Creator = new CreatorViewModel
-                                {
-                                    Creator = this.TryGetNodeContent(doc, "creator"),
-                                    FileAs = this.TryGetAttributeContent(doc, "creator", "file-as"),
-                                    Role = this.TryGetAttributeContent(doc, "creator", "role")
-                                },
-                                Date = this.TryGetNodeContent(doc, "date", "event", "creation"),
-                                Source = this.TryGetNodeContent(doc, "source"),
-                                Description = this.TryGetNodeContent(doc, "description"),
-                                Format = this.TryGetNodeContent(doc, "format"),
-                                Language = this.TryGetNodeContent(doc, "language"),
-                                Publisher = this.TryGetNodeContent(doc, "publisher"),
-                                Subject = this.TryGetNodeContent(doc, "subject"),
-                                Type = this.TryGetNodeContent(doc, "type")
+                };
 
-                            };
+                return metata;
 
-                            return metata;
-                        }
-                }
+
 
             }
 
@@ -136,6 +133,33 @@ namespace Epub_Manager.Services
         {
             var metadataNode = document?.Root?.Elements().First(f => f.Name.LocalName == "metadata");
             return metadataNode?.Elements().FirstOrDefault(f => f.Name.LocalName == node)?.Attributes().FirstOrDefault(f => f.Name.LocalName == attribute)?.Value;
+        }
+
+        private string GetCoverFileName(XDocument document)
+        {
+            var metadatanode = document?.Root?.Elements().FirstOrDefault(f => f.Name.LocalName == "metadata");
+
+            return metadatanode
+                ?.Elements()
+                .FirstOrDefault(f => f.Name.LocalName == "meta" && f.Attributes().Any(d => d.Name.LocalName == "name" && d.Value == "cover"))
+                ?.Attributes()
+                .FirstOrDefault(f => f.Name.LocalName == "content")
+                ?.Value;
+        }
+
+        private XDocument GetOPF(ZipArchive archive)
+        {
+            foreach (var zipArchiveEntry in archive.Entries)
+            {
+
+                if (zipArchiveEntry.Name.EndsWith(".opf"))
+                    using (var entryStream = zipArchiveEntry.Open())
+                    using (var streamReader = new StreamReader(entryStream, Encoding.UTF8))
+                    {
+                        return XDocument.Parse(streamReader.ReadToEnd());
+                    }
+            }
+            throw new EpubException("No content found.");
         }
     }
 }
