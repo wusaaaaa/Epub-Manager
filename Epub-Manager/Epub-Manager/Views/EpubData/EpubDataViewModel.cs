@@ -6,6 +6,7 @@ using Epub_Manager.Extensions;
 using Epub_Manager.Views.EpubData.Tree;
 using Epub_Manager.Views.Shell;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media;
 
@@ -23,6 +24,7 @@ namespace Epub_Manager.Views.EpubData
         private FileInfo _file;
         private BindableCollection<TableOfContentEntry> _toC;
         private MetaData _metaData;
+        private BindableCollection<ImageSource> _images;
 
         #endregion
 
@@ -64,6 +66,12 @@ namespace Epub_Manager.Views.EpubData
             set { this.SetProperty(ref this._metaData, value); }
         }
 
+        public BindableCollection<ImageSource> Images
+        {
+            get { return this._images; }
+            set { this.SetProperty(ref this._images, value); }
+        }
+
         #endregion
 
         #region Ctor
@@ -83,6 +91,7 @@ namespace Epub_Manager.Views.EpubData
             this._eventAggregator.Subscribe(this);
             this.TreeItems = new BindableCollection<TreeItemViewModel>();
             this.ToC = new BindableCollection<TableOfContentEntry>();
+            this.Images = new BindableCollection<ImageSource>();
         }
 
         #endregion
@@ -213,6 +222,27 @@ namespace Epub_Manager.Views.EpubData
             }
         }
 
+        private void GetImages(FileInfo info)
+        {
+            Guard.ArgumentNotNull(info, nameof(info));
+
+            try
+            {
+                this.Images.Clear();
+
+                var images = this._epubService.GetAllImages(this.File);
+
+                if (images == null)
+                    return;
+
+                this.Images.AddRange(images);
+            }
+            catch (EpubException ex)
+            {
+                this._exceptionHandler.Handle(ex);
+            }
+        }
+
         public void Handle(TreeItemSelected message)
         {
             if (message.TreeItem is FileTreeItemViewModel)
@@ -228,6 +258,7 @@ namespace Epub_Manager.Views.EpubData
             this.GetCover(this.File);
             this.GetToC(this.File);
             this.GetMetaData(this.File);
+            this.GetImages(this.File);
         }
 
         #endregion
