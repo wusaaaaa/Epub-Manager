@@ -3,6 +3,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Epub_Manager.Extensions;
+using Epub_Manager.Views.EpubData;
 using Epub_Manager.Views.Shell;
 
 namespace Epub_Manager.Windsor
@@ -19,6 +20,9 @@ namespace Epub_Manager.Windsor
 
                 .ConfigureFor<IShellItem>(f =>
                     f.Forward<IShellItem>())
+
+                .ConfigureFor<IEpubDetails>(f =>
+                    f.Forward<IEpubDetails>())
 
                 .ConfigureIf(f => typeof(ConductorBaseWithActiveItem<>).IsAssignableFromGenericType(f.Implementation), f =>
                    f.PropertiesIgnore(d => d.Name == nameof(ConductorBaseWithActiveItem<object>.ActiveItem)))

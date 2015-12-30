@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="Epub_Manager.Views.EpubData.MetaData.MetaDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Epub_Manager.Views.EpubData.MetaData"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             mc:Ignorable="d" 
+             
+             d:DesignWidth="300"
+             d:DesignHeight="300" >
+
+    <UserControl.Resources>
+        <Style TargetType="dxlc:LayoutItem">
+            <Setter Property="AddColonToLabel"
+                    Value="True"/>
+        </Style>    
+    </UserControl.Resources>
+    
+    <dxlc:LayoutControl>
+
+        <dxlc:LayoutGroup Header="Meta data"
+                          Orientation="Vertical">
+            <dxlc:LayoutItem Label="Title">
+                <dxe:TextEdit EditValue="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="CreatorName">
+                <dxe:TextEdit EditValue="{Binding CreatorName, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="File as">
+                <dxe:TextEdit EditValue="{Binding FileAs, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Role">
+                <dxe:TextEdit EditValue="{Binding Role, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Description"
+                             VerticalAlignment="Stretch">
+                <dxe:TextEdit EditValue="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Publisher">
+                <dxe:TextEdit EditValue="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Date">
+                <dxe:TextEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Subject">
+                <dxe:TextEdit EditValue="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Type">
+                <dxe:TextEdit EditValue="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Format">
+                <dxe:TextEdit EditValue="{Binding Format, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Identifier">
+                <dxe:TextEdit EditValue="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Source">
+                <dxe:TextEdit EditValue="{Binding Source, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="Language">
+                <dxe:TextEdit EditValue="{Binding Language, UpdateSourceTrigger=PropertyChanged}" />
+            </dxlc:LayoutItem>
+        </dxlc:LayoutGroup>
+
+    </dxlc:LayoutControl>
+</UserControl>

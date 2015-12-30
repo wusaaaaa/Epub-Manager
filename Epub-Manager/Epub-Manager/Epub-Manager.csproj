@@ -115,10 +115,28 @@
     <Compile Include="Services\ExceptionHandler.cs" />
     <Compile Include="Services\LoadingService.cs" />
     <Compile Include="Services\MessageManager.cs" />
+    <Compile Include="Views\EpubData\Cover\CoverView.xaml.cs">
+      <DependentUpon>CoverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EpubData\Cover\CoverViewModel.cs" />
     <Compile Include="Views\EpubData\EpubDataView.xaml.cs">
       <DependentUpon>EpubDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EpubData\EpubDataViewModel.cs" />
+    <Compile Include="Views\EpubData\IEpubDetails.cs" />
+    <Compile Include="Views\EpubData\Images\ImageContainer.cs" />
+    <Compile Include="Views\EpubData\Images\ImagesView.xaml.cs">
+      <DependentUpon>ImagesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EpubData\Images\ImagesViewModel.cs" />
+    <Compile Include="Views\EpubData\MetaData\MetaDataView.xaml.cs">
+      <DependentUpon>MetaDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EpubData\MetaData\MetaDataViewModel.cs" />
+    <Compile Include="Views\EpubData\TableofContent\TableOfContentView.xaml.cs">
+      <DependentUpon>TableOfContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EpubData\TableofContent\TableOfContentViewModel.cs" />
     <Compile Include="Views\EpubData\Tree\FileTreeItemViewModel.cs" />
     <Compile Include="Views\EpubData\Tree\FolderTreeItemViewModel.cs" />
     <Compile Include="Views\EpubData\Tree\TreeItemSelected.cs" />
@@ -182,7 +200,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\EpubData\Cover\CoverView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EpubData\EpubDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EpubData\Images\ImagesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EpubData\MetaData\MetaDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EpubData\TableofContent\TableOfContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

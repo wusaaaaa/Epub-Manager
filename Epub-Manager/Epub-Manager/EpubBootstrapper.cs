@@ -31,9 +31,12 @@ namespace Epub_Manager
 
         protected override object GetInstance(Type service, string key)
         {
+            if (service == null)
+                return null;
+
             if (this._container.Kernel.HasComponent(service) == false)
                 return base.GetInstance(service, key);
-
+            
             return this._container.Resolve(service);
         }
 

@@ -9,6 +9,7 @@
              xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:caliburn="http://www.caliburnproject.org"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="500">
@@ -28,10 +29,10 @@
                     <dxr:RibbonPageGroup Caption="MetaData">
                         <dxb:BarButtonItem Content="Save"
                                            LargeGlyph="{dx:DXImageOffice2013 Image=Save_32x32.png}"
-                                           Command="{Binding SaveCommand}" />
+                                           Command="{Binding SaveMetaData}" />
                         <dxb:BarButtonItem Content="Cancel"
                                            LargeGlyph="{dx:DXImage Image=Delete_32x32.png}"
-                                           Command="{Binding CancelCommand}" />
+                                           Command="{Binding CancelMetadata}" />
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
@@ -80,154 +81,22 @@
             </dxlc:LayoutItem>
 
             <!-- Tabs -->
-            <dxlc:LayoutGroup View="Tabs"
-                                  VerticalAlignment="Stretch"
-                                  HorizontalAlignment="Stretch">
-
-                <!-- Cover -->
-                <dxlc:LayoutGroup Header="Cover"
-                                      Orientation="Vertical">
-                    <dxlc:LayoutItem VerticalAlignment="Stretch"
-                                         HorizontalAlignment="Stretch">
-                        <dxe:ImageEdit Source="{Binding CoverImage, Mode=TwoWay}"
-                                           VerticalAlignment="Stretch"
-                                           HorizontalAlignment="Stretch"
-                                           ShowMenu="False"
-                                           IsReadOnly="True" />
-                    </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-
-                <!-- Meta data -->
-                <dxlc:LayoutGroup Header="Meta data"
-                                      Orientation="Vertical">
-                    <dxlc:LayoutItem Label="Title">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Title, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="CreatorName">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.CreatorName, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="File as">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.FileAs, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Role">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Creator.Role, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Description"
-                                         VerticalAlignment="Stretch">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Description, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Publisher">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Publisher, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Date">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Date, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Subject">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Subject, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Type">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Type, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Format">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Format, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Identifier">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Identifier, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Source">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Source, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Language">
-                        <dxe:TextEdit EditValue="{Binding MetaData.Language, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-
-                <!-- Table of Content -->
-                <dxlc:LayoutGroup Header="Table of Content">
-                    <dxlc:LayoutItem VerticalAlignment="Stretch"
-                                         HorizontalAlignment="Stretch">
-                        <TreeView ItemsSource="{Binding ToC, Mode=OneWay}">
-                            <TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate ItemsSource="{Binding SubEntries}">
-                                    <TextBlock Text="{Binding Name}"/>
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
-                            <TreeView.ItemContainerStyle>
-                                <Style TargetType="TreeViewItem">
-                                    <Setter Property="IsExpanded"
-                                            Value="True"/>
-                                </Style>
-                            </TreeView.ItemContainerStyle>
-                        </TreeView>
-                    </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-
-                <!-- Images -->
-                <dxlc:LayoutGroup Header="Images">
-                    <dxlc:LayoutItem VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Stretch">
-                        <dxlc:FlowLayoutControl x:Name="LayoutImages"
-                                                ItemsSource="{Binding Images}"
-                                                AllowItemMoving="True" 
-                                                AllowLayerSizing="True" 
-                                                AllowMaximizedElementMoving="True" 
-                                                AnimateItemMoving="True" 
-                                                DragScrolling="False"
-                                                Background="White" 
-                                                ShowLayerSeparators="True"
-                                                ItemsSizeChanged="LayoutImagesItemsSizeChanged">
-                            <dxlc:FlowLayoutControl.ItemTemplate>
-                                <DataTemplate>
-                                    <local:ImageContainer Content="{Binding}"
-                                                          Width="280"
-                                                          HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center"
-                                                          Cursor="Hand">
-                                        <local:ImageContainer.Template>
-                                            <ControlTemplate TargetType="local:ImageContainer">
-                                                <Image x:Name="root"
-                                                       Source="{TemplateBinding Content}"
-                                                       RenderTransformOrigin="0.5, 0.5">
-                                                    <Image.RenderTransform>
-                                                        <ScaleTransform/>
-                                                    </Image.RenderTransform>
-                                                    <VisualStateManager.VisualStateGroups>
-                                                        <VisualStateGroup x:Name="CommonStates">
-                                                            <VisualStateGroup.Transitions>
-                                                                <VisualTransition To="MouseOver"
-                                                                              GeneratedDuration="0:0:0.075" />
-                                                                <VisualTransition From="MouseOver"
-                                                                              GeneratedDuration="0:0:0.05" />
-                                                            </VisualStateGroup.Transitions>
-
-                                                            <VisualState x:Name="Normal"/>
-                                                            <VisualState x:Name="MouseOver">
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="root"
-                                                                                 Storyboard.TargetProperty="(RenderTransform).ScaleX"
-                                                                                 To="1.03"
-                                                                                 Duration="0" />
-                                                                    <DoubleAnimation Storyboard.TargetName="root"
-                                                                                 Storyboard.TargetProperty="(RenderTransform).ScaleY"
-                                                                                 To="1.03"
-                                                                                 Duration="0" />
-                                                                </Storyboard>
-                                                            </VisualState>
-                                                            <VisualState x:Name="Passed"/>
-                                                        </VisualStateGroup>
-                                                    </VisualStateManager.VisualStateGroups>
-                                                </Image>
-                                            </ControlTemplate>
-                                        </local:ImageContainer.Template>
-                                    </local:ImageContainer>
-                                </DataTemplate>
-                            </dxlc:FlowLayoutControl.ItemTemplate>
-                        </dxlc:FlowLayoutControl>
-                    </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-
-            </dxlc:LayoutGroup>
-
+            <dxlc:LayoutItem VerticalAlignment="Stretch"
+                             Margin="0,2,0,0">
+                <TabControl ItemsSource="{Binding Items}"
+                            SelectedItem="{Binding ActiveItem}">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem">
+                            <Setter Property="Header" Value="{Binding DisplayName}" />
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <ContentControl caliburn:View.Model="{Binding}" />
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+            </dxlc:LayoutItem>
 
         </dxlc:LayoutControl>
 
