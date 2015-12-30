@@ -18,8 +18,8 @@
                     Value="True"/>
         </Style>    
     </UserControl.Resources>
-    
-    <dxlc:LayoutControl>
+
+    <dxlc:LayoutControl Padding="0">
 
         <dxlc:LayoutGroup Header="Meta data"
                           Orientation="Vertical">

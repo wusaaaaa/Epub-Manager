@@ -12,7 +12,7 @@
              d:DesignWidth="300"
              d:DesignHeight="300" >
 
-    <dxlc:LayoutControl>
+    <dxlc:LayoutControl Padding="0">
 
         <dxlc:LayoutItem VerticalAlignment="Stretch"
                                      HorizontalAlignment="Stretch">
