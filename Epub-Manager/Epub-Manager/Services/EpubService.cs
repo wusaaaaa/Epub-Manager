@@ -1,8 +1,11 @@
 ﻿using DevExpress.Utils;
 using Epub_Manager.Core;
+using Epub_Manager.Core.Entites;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Windsor.Interceptors;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -78,7 +81,7 @@ namespace Epub_Manager.Services
                 }
             }
         }
-        
+
         [CatchException("Error while loading the meta data")]
         public MetaData GetMetaData(FileInfo file)
         {
@@ -100,7 +103,7 @@ namespace Epub_Manager.Services
                         FileAs = this.TryGetAttributeContent(doc, "creator", "file-as"),
                         Role = this.TryGetAttributeContent(doc, "creator", "role")
                     },
-                    Date = this.TryGetNodeContent(doc, "date", "event", "creation"),
+                    Date = this.GetDatetimeFromString(this.TryGetNodeContent(doc, "date", "event", "creation")),
                     Source = this.TryGetNodeContent(doc, "source"),
                     Description = this.TryGetNodeContent(doc, "description"),
                     Format = this.TryGetNodeContent(doc, "format"),
@@ -112,12 +115,7 @@ namespace Epub_Manager.Services
                 };
 
                 return metata;
-
-
-
             }
-
-            return null;
         }
 
         [CatchException("Error while loading the images in the epub")]
@@ -213,6 +211,24 @@ namespace Epub_Manager.Services
             }
 
             return result;
+        }
+
+        private DateTime? GetDatetimeFromString(string date)
+        {
+            var formats = new string[]
+            {
+                "yyyy",
+                "yyyy-MM",
+                "yyyy-MM-dd",
+            };
+            
+            DateTime result;
+            if (DateTime.TryParseExact(date, formats, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out result))
+            {
+                return result;
+            }
+
+            return null;
         }
 
         #endregion

@@ -43,7 +43,7 @@
                 <dxe:TextEdit EditValue="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Date">
-                <dxe:TextEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
+                <dxe:DateEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" MaskUseAsDisplayFormat="True" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Subject">
                 <dxe:TextEdit EditValue="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" />

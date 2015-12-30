@@ -4,6 +4,7 @@ using Epub_Manager.Core;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
 using System.IO;
+using Epub_Manager.Core.Entites;
 
 namespace Epub_Manager.Views.EpubData.TableofContent
 {

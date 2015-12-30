@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media.Imaging;
+using Epub_Manager.Core.Entites;
 
 namespace Epub_Manager.Core.Services
 {

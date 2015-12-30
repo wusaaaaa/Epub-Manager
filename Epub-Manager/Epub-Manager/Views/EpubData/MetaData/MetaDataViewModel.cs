@@ -3,6 +3,7 @@ using DevExpress.Utils;
 using Epub_Manager.Core;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
+using System;
 using System.IO;
 
 namespace Epub_Manager.Views.EpubData.MetaData
@@ -13,14 +14,14 @@ namespace Epub_Manager.Views.EpubData.MetaData
 
         private readonly IEpubService _epubService;
         private readonly IExceptionHandler _exceptionHandler;
-        private Core.MetaData _metaData;
+        private Core.Entites.MetaData _metaData;
         private string _title;
         private string _creatorName;
         private string _fileAs;
         private string _role;
         private string _description;
         private string _publisher;
-        private string _date;
+        private DateTime? _date;
         private string _subject;
         private string _type;
         private string _format;
@@ -32,7 +33,7 @@ namespace Epub_Manager.Views.EpubData.MetaData
 
         #region Properties
 
-        public Core.MetaData MetaData
+        public Core.Entites.MetaData MetaData
         {
             get { return this._metaData; }
             set
@@ -92,7 +93,7 @@ namespace Epub_Manager.Views.EpubData.MetaData
             set { this.SetProperty(ref this._publisher, value); }
         }
 
-        public string Date
+        public DateTime? Date
         {
             get { return this._date; }
             set { this.SetProperty(ref this._date, value); }

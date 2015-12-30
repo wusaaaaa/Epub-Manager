@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
-namespace Epub_Manager.Core
+namespace Epub_Manager.Core.Entites
 {
-    public class TableOfContentEntry
-    {
-        public string Name { get; set; }
-        public List<TableOfContentEntry> SubEntries { get; set; }
-    }
-
     public class MetaData
     {
         public string Title { get; set; }
@@ -18,7 +12,7 @@ namespace Epub_Manager.Core
 
         public string Publisher { get; set; }
 
-        public string Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public string Subject { get; set; }
 
@@ -31,14 +25,5 @@ namespace Epub_Manager.Core
         public string Source { get; set; }
 
         public string Language { get; set; }
-    }
-
-    public class Creator
-    {
-        public string CreatorName { get; set; }
-
-        public string FileAs { get; set; }
-
-        public string Role { get; set; }
     }
 }
