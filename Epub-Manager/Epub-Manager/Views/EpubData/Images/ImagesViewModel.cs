@@ -4,6 +4,7 @@ using Epub_Manager.Core;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace Epub_Manager.Views.EpubData.Images
@@ -30,7 +31,7 @@ namespace Epub_Manager.Views.EpubData.Images
             this.Images = new BindableCollection<ImageSource>();
         }
 
-        public void FileChanged(FileInfo file)
+        public async Task FileChanged(FileInfo file)
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
@@ -49,6 +50,20 @@ namespace Epub_Manager.Views.EpubData.Images
             {
                 this._exceptionHandler.Handle(ex);
             }
+        }
+        public bool CanSave()
+        {
+            return true;
+        }
+
+        public Task Save()
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task CancelChanges()
+        {
+            return Task.CompletedTask;
         }
     }
 }

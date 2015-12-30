@@ -29,10 +29,10 @@
                     <dxr:RibbonPageGroup Caption="MetaData">
                         <dxb:BarButtonItem Content="Save"
                                            LargeGlyph="{dx:DXImageOffice2013 Image=Save_32x32.png}"
-                                           Command="{Binding SaveMetaData}" />
+                                           Command="{Binding Save}" />
                         <dxb:BarButtonItem Content="Cancel"
                                            LargeGlyph="{dx:DXImage Image=Delete_32x32.png}"
-                                           Command="{Binding CancelMetadata}" />
+                                           Command="{Binding CancelChanges}" />
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>

@@ -5,6 +5,7 @@ using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Epub_Manager.Views.EpubData.MetaData
 {
@@ -40,19 +41,7 @@ namespace Epub_Manager.Views.EpubData.MetaData
             {
                 if (this.SetProperty(ref this._metaData, value))
                 {
-                    this.Title = this.MetaData?.Title;
-                    this.CreatorName = this.MetaData?.Creator?.CreatorName;
-                    this.FileAs = this.MetaData?.Creator?.FileAs;
-                    this.Role = this.MetaData?.Creator?.Role;
-                    this.Description = this.MetaData?.Description;
-                    this.Publisher = this.MetaData?.Publisher;
-                    this.Date = this.MetaData?.Date;
-                    this.Subject = this.MetaData?.Subject;
-                    this.Type = this.MetaData?.Type;
-                    this.Format = this.MetaData?.Format;
-                    this.Identifier = this.MetaData?.Identifier;
-                    this.Source = this.MetaData?.Source;
-                    this.Language = this.MetaData?.Language;
+                    this.FillData();
                 }
             }
         }
@@ -151,7 +140,7 @@ namespace Epub_Manager.Views.EpubData.MetaData
 
         #region Methods
 
-        public void FileChanged(FileInfo file)
+        public async Task FileChanged(FileInfo file)
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
@@ -173,6 +162,57 @@ namespace Epub_Manager.Views.EpubData.MetaData
             {
                 this._exceptionHandler.Handle(ex);
             }
+        }
+
+        public bool CanSave()
+        {
+            if (this.MetaData?.Title == this.Title &&
+                this.MetaData?.Creator?.CreatorName == this.CreatorName &&
+                this.MetaData?.Creator?.FileAs == this.FileAs &&
+                this.MetaData?.Creator?.Role == this.Role &&
+                this.MetaData?.Date == this.Date &&
+                this.MetaData?.Description == this.Description &&
+                this.MetaData?.Format == this.Format &&
+                this.MetaData?.Identifier == this.Identifier &&
+                this.MetaData?.Language == this.Language &&
+                this.MetaData?.Publisher == this.Publisher &&
+                this.MetaData?.Source == this.Source &&
+                this.MetaData?.Subject == this.Subject &&
+                this.MetaData?.Type == this.Type)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(this.Title))
+                return false;
+
+            return true;
+        }
+
+        public Task Save()
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task CancelChanges()
+        {
+            this.FillData();
+            return Task.CompletedTask;
+        }
+        
+        private void FillData()
+        {
+            this.Title = this.MetaData?.Title;
+            this.CreatorName = this.MetaData?.Creator?.CreatorName;
+            this.FileAs = this.MetaData?.Creator?.FileAs;
+            this.Role = this.MetaData?.Creator?.Role;
+            this.Description = this.MetaData?.Description;
+            this.Publisher = this.MetaData?.Publisher;
+            this.Date = this.MetaData?.Date;
+            this.Subject = this.MetaData?.Subject;
+            this.Type = this.MetaData?.Type;
+            this.Format = this.MetaData?.Format;
+            this.Identifier = this.MetaData?.Identifier;
+            this.Source = this.MetaData?.Source;
+            this.Language = this.MetaData?.Language;
         }
 
         #endregion

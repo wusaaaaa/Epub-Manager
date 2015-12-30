@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Epub_Manager.Views.EpubData
 {
@@ -43,8 +44,8 @@ namespace Epub_Manager.Views.EpubData
 
         #region Commands
 
-        public DelegateCommand SaveMetadata { get; set; }
-        public DelegateCommand CancelMetadata { get; set; }
+        public AsyncCommand Save { get; }
+        public AsyncCommand CancelChanges { get; }
 
         #endregion
 
@@ -58,6 +59,9 @@ namespace Epub_Manager.Views.EpubData
             
             this.Items.AddRange(details);
             this.ActiveItem = this.Items.First();
+
+            this.Save = new AsyncCommand(this.SaveImpl, this.CanSaveImpl);
+            this.CancelChanges = new AsyncCommand(this.CancelChangesImpl);
         }
 
         #endregion
@@ -143,6 +147,20 @@ namespace Epub_Manager.Views.EpubData
             }
         }
 
+        private bool CanSaveImpl()
+        {
+            return this.ActiveItem.CanSave();
+        }
+
+        private Task SaveImpl()
+        {
+           return this.ActiveItem.Save();
+        }
+
+        private Task CancelChangesImpl()
+        {
+            return this.ActiveItem.CancelChanges();
+        }
         #endregion
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Utils;
 using Epub_Manager.Core;
+using Epub_Manager.Core.Entites;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
 using System.IO;
-using Epub_Manager.Core.Entites;
+using System.Threading.Tasks;
 
 namespace Epub_Manager.Views.EpubData.TableofContent
 {
@@ -30,7 +31,7 @@ namespace Epub_Manager.Views.EpubData.TableofContent
             this.DisplayName = "Table of Content";
         }
 
-        public void FileChanged(FileInfo file)
+        public async Task FileChanged(FileInfo file)
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
@@ -49,6 +50,20 @@ namespace Epub_Manager.Views.EpubData.TableofContent
             {
                 this._exceptionHandler.Handle(ex);
             }
+        }
+        public bool CanSave()
+        {
+            return true;
+        }
+
+        public Task Save()
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task CancelChanges()
+        {
+            return Task.CompletedTask;
         }
     }
 }
