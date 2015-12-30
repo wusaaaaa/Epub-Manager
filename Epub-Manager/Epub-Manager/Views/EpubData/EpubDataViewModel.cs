@@ -1,5 +1,8 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Mvvm;
+using DevExpress.Utils;
+using Epub_Manager.Core;
+using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
 using Epub_Manager.Views.EpubData.Tree;
 using Epub_Manager.Views.Shell;
@@ -13,8 +16,10 @@ namespace Epub_Manager.Views.EpubData
 {
     public class EpubDataViewModel : Conductor<IEpubDetails>.Collection.OneActive, IShellItem, IHandle<TreeItemSelected>
     {
+        private readonly IExceptionHandler _exceptionHandler;
+
         #region Fields
-        
+
         private BindableCollection<TreeItemViewModel> _treeItems;
         private FileInfo _file;
 
@@ -29,7 +34,7 @@ namespace Epub_Manager.Views.EpubData
             get { return this._treeItems; }
             set { this.SetProperty(ref this._treeItems, value); }
         }
-        
+
         public FileInfo File
         {
             get { return this._file; }
@@ -51,12 +56,16 @@ namespace Epub_Manager.Views.EpubData
 
         #region Ctor
 
-        public EpubDataViewModel(IEnumerable<IEpubDetails> details)
+        public EpubDataViewModel(IEnumerable<IEpubDetails> details, IExceptionHandler exceptionHandler)
         {
+            Guard.ArgumentNotNull(exceptionHandler, nameof(exceptionHandler));
+
+            this._exceptionHandler = exceptionHandler;
+
             this.DisplayName = "Epub Data";
-            
+
             this.TreeItems = new BindableCollection<TreeItemViewModel>();
-            
+
             this.Items.AddRange(details);
             this.ActiveItem = this.Items.First();
 
@@ -80,7 +89,7 @@ namespace Epub_Manager.Views.EpubData
 
             this.BuildTree();
         }
-        
+
         #endregion
 
         #region Tree
@@ -139,11 +148,11 @@ namespace Epub_Manager.Views.EpubData
             }
         }
 
-        private void FileChanged()
+        private async void FileChanged()
         {
             foreach (var item in this.Items)
             {
-                item.FileChanged(this.File);
+                await item.FileChanged(this.File);
             }
         }
 
@@ -152,9 +161,18 @@ namespace Epub_Manager.Views.EpubData
             return this.ActiveItem.CanSave();
         }
 
-        private Task SaveImpl()
+        private async Task SaveImpl()
         {
-           return this.ActiveItem.Save();
+            try
+            {
+                await this.ActiveItem.Save();
+
+                this.FileChanged();
+            }
+            catch (EpubException ex)
+            {
+                this._exceptionHandler.Handle(ex);
+            }
         }
 
         private Task CancelChangesImpl()

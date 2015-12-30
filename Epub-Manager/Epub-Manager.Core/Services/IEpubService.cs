@@ -13,6 +13,8 @@ namespace Epub_Manager.Core.Services
 
         MetaData GetMetaData(FileInfo file);
 
+        void SaveMetaData(FileInfo file, MetaData metadata);
+
         List<BitmapImage> GetAllImages(FileInfo file);
     }
 }

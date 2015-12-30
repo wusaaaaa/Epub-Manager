@@ -31,7 +31,7 @@ namespace Epub_Manager.Services
                 if (coverFileName == null)
                     throw new EpubException("No cover file exists.");
 
-                var validFileEndings = new[] { ".jpg", ".jpeg" };
+                var validFileEndings = new[] {".jpg", ".jpeg"};
 
                 var entry = archive.Entries.FirstOrDefault(f => f.Name.StartsWith(coverFileName) && validFileEndings.Any(d => f.Name.EndsWith(d)));
 
@@ -62,8 +62,8 @@ namespace Epub_Manager.Services
                 var tocEntry = archive.Entries.FirstOrDefault(f => f.Name.EndsWith(".ncx"));
                 if (tocEntry == null)
                     throw new EpubException("No table of content found.");
-                
-                using (var tocStream  = tocEntry.Open())
+
+                using (var tocStream = tocEntry.Open())
                 using (var streamReader = new StreamReader(tocStream, Encoding.UTF8))
                 {
                     var tocXmlDocument = XDocument.Load(streamReader);
@@ -118,6 +118,40 @@ namespace Epub_Manager.Services
             }
         }
 
+        [CatchException("Error while saving the meta data")]
+        public void SaveMetaData(FileInfo file, MetaData metadata)
+        {
+            Guard.ArgumentNotNull(file, nameof(file));
+            Guard.ArgumentNotNull(metadata, nameof(metadata));
+
+            using (var stream = File.Open(file.FullName, FileMode.Open, FileAccess.ReadWrite))
+            using (var archive = new ZipArchive(stream, ZipArchiveMode.Update))
+            {
+                var doc = this.GetOPF(archive);
+
+                this.UpdateNodeContent(doc, "title", metadata.Title);
+                this.UpdateNodeContent(doc, "identifier", metadata.Identifier);
+                this.UpdateNodeContent(doc, "creator", metadata.Creator.CreatorName, new Dictionary<string, string>
+                {
+                    ["file-as"] = metadata.Creator.FileAs,
+                    ["role"] = metadata.Creator.Role
+                } );
+                this.UpdateNodeContent(doc, "date", metadata.Date?.ToString("O"), new Dictionary<string, string>
+                {
+                    ["event"] = "creation"
+                });
+                this.UpdateNodeContent(doc, "source", metadata.Source);
+                this.UpdateNodeContent(doc, "description", metadata.Description);
+                this.UpdateNodeContent(doc, "format", metadata.Format);
+                this.UpdateNodeContent(doc, "language", metadata.Language);
+                this.UpdateNodeContent(doc, "publisher", metadata.Publisher);
+                this.UpdateNodeContent(doc, "subject", metadata.Subject);
+                this.UpdateNodeContent(doc, "type", metadata.Type);
+
+                this.WriteOPF(doc, archive);
+            }
+        }
+
         [CatchException("Error while loading the images in the epub")]
         public List<BitmapImage> GetAllImages(FileInfo file)
         {
@@ -167,6 +201,36 @@ namespace Epub_Manager.Services
             return metadataNode?.Elements().FirstOrDefault(f => f.Name.LocalName == node)?.Attributes().FirstOrDefault(f => f.Name.LocalName == attribute)?.Value;
         }
 
+        private void UpdateNodeContent(XDocument document, string name, string value, Dictionary<string, string> attributes = null)
+        {
+            var metadataNode = document?.Root?.Elements().First(f => f.Name.LocalName == "metadata");
+
+            if (metadataNode == null)
+                throw new EpubException("No meta data node in opf file found");
+
+            var node = metadataNode.Elements().FirstOrDefault(f => f.Name.LocalName == name);
+
+            if (node == null)
+            {
+                node = new XElement(XName.Get(name, "http://purl.org/dc/elements/1.1/"));
+                metadataNode.Add(node);
+            }
+
+            node.Value = value ?? string.Empty;
+
+            foreach (var attribute in attributes ?? new Dictionary<string, string>())
+            {
+                var attributeNode = node.Attributes().FirstOrDefault(f => f.Name.LocalName == attribute.Key);
+                if (attributeNode == null)
+                {
+                    attributeNode = new XAttribute(XName.Get(attribute.Key, "http://www.idpf.org/2007/opf"), attribute.Value);
+                    node.Add(attributeNode);
+                }
+
+                attributeNode.Value = attribute.Value ?? string.Empty;
+            }
+        }
+
         private string GetCoverFileName(XDocument document)
         {
             var metadatanode = document?.Root?.Elements().FirstOrDefault(f => f.Name.LocalName == "metadata");
@@ -177,6 +241,21 @@ namespace Epub_Manager.Services
                 ?.Attributes()
                 .FirstOrDefault(f => f.Name.LocalName == "content")
                 ?.Value;
+        }
+
+        private void WriteOPF(XDocument document, ZipArchive archive)
+        {
+            var opf = archive.Entries.FirstOrDefault(f => f.Name.EndsWith(".opf"));
+
+            if(opf == null)
+                throw new EpubException("No opf file found");
+
+            var fullOpfFilePath = opf.FullName;
+            opf.Delete();
+
+            opf = archive.CreateEntry(fullOpfFilePath);
+            using(var stream = opf.Open())
+                document.Save(stream);
         }
 
         private XDocument GetOPF(ZipArchive archive)
@@ -221,7 +300,7 @@ namespace Epub_Manager.Services
                 "yyyy-MM",
                 "yyyy-MM-dd",
             };
-            
+
             DateTime result;
             if (DateTime.TryParseExact(date, formats, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out result))
             {
@@ -230,6 +309,8 @@ namespace Epub_Manager.Services
 
             return null;
         }
+
+
 
         #endregion
     }

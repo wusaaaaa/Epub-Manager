@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Utils;
 using Epub_Manager.Core;
+using Epub_Manager.Core.Entites;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
 using System;
@@ -29,6 +30,7 @@ namespace Epub_Manager.Views.EpubData.MetaData
         private string _identifier;
         private string _source;
         private string _language;
+        private FileInfo _file;
 
         #endregion
 
@@ -144,6 +146,8 @@ namespace Epub_Manager.Views.EpubData.MetaData
         {
             Guard.ArgumentNotNull(file, nameof(file));
 
+            this._file = file;
+
             try
             {
                 this.MetaData = null;
@@ -166,6 +170,12 @@ namespace Epub_Manager.Views.EpubData.MetaData
 
         public bool CanSave()
         {
+            if (this.MetaData == null)
+                return false;
+
+            if (this._file == null)
+                return false;
+
             if (this.MetaData?.Title == this.Title &&
                 this.MetaData?.Creator?.CreatorName == this.CreatorName &&
                 this.MetaData?.Creator?.FileAs == this.FileAs &&
@@ -189,15 +199,36 @@ namespace Epub_Manager.Views.EpubData.MetaData
 
         public Task Save()
         {
+            var metaData = new Core.Entites.MetaData
+            {
+                Source = this.Source,
+                Creator = new Creator
+                {
+                    FileAs = this.FileAs,
+                    CreatorName = this.CreatorName,
+                    Role = this.Role
+                },
+                Title = this.Title,
+                Type = this.Type,
+                Format = this.Format,
+                Date = this.Date,
+                Subject = this.Subject,
+                Publisher = this.Publisher,
+                Description = this.Description,
+                Identifier = this.Identifier,
+                Language = this.Language
+            };
+
+            this._epubService.SaveMetaData(this._file, metaData);
+
             return Task.CompletedTask;
         }
 
         public Task CancelChanges()
         {
-            this.FillData();
             return Task.CompletedTask;
         }
-        
+
         private void FillData()
         {
             this.Title = this.MetaData?.Title;

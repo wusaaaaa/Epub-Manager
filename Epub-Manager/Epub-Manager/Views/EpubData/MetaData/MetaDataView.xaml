@@ -36,14 +36,18 @@
                 <dxe:TextEdit EditValue="{Binding Role, UpdateSourceTrigger=PropertyChanged}" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Description"
+                             LabelVerticalAlignment="Top"
                              VerticalAlignment="Stretch">
-                <dxe:TextEdit EditValue="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                <dxe:TextEdit EditValue="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                              VerticalContentAlignment="Top"
+                              AcceptsReturn="True"/>
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Publisher">
                 <dxe:TextEdit EditValue="{Binding Publisher, UpdateSourceTrigger=PropertyChanged}" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Date">
-                <dxe:DateEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" MaskUseAsDisplayFormat="True" />
+                <dxe:DateEdit EditValue="{Binding Date, UpdateSourceTrigger=PropertyChanged}" 
+                              MaskUseAsDisplayFormat="True" />
             </dxlc:LayoutItem>
             <dxlc:LayoutItem Label="Subject">
                 <dxe:TextEdit EditValue="{Binding Subject, UpdateSourceTrigger=PropertyChanged}" />

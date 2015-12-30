@@ -3,6 +3,7 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Services;
+using Epub_Manager.Windsor.Facilities;
 
 namespace Epub_Manager.Windsor
 {
@@ -16,6 +17,8 @@ namespace Epub_Manager.Windsor
                 Component.For<IMessageManager>().ImplementedBy<MessageManager>().LifestyleSingleton(),
                 Component.For<IEpubService>().ImplementedBy<EpubService>().LifestyleSingleton()
                 );
+
+            container.AddFacility<MakeEpubExceptionFacility>();
         }
     }
 }
