@@ -52,7 +52,7 @@ namespace Epub_Manager.Views.EpubData.Cover
 
         public bool CanSave()
         {
-            return true;
+            return false;
         }
 
         public Task Save()

@@ -53,7 +53,7 @@ namespace Epub_Manager.Views.EpubData.Images
         }
         public bool CanSave()
         {
-            return true;
+            return false;
         }
 
         public Task Save()

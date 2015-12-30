@@ -53,7 +53,7 @@ namespace Epub_Manager.Views.EpubData.TableofContent
         }
         public bool CanSave()
         {
-            return true;
+            return false;
         }
 
         public Task Save()

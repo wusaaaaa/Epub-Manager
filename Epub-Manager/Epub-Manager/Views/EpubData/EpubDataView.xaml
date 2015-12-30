@@ -26,12 +26,12 @@
                            MinimizationButtonVisibility="Collapsed">
             <dxr:RibbonDefaultPageCategory>
                 <dxr:RibbonPage Caption="Start">
-                    <dxr:RibbonPageGroup Caption="MetaData">
+                    <dxr:RibbonPageGroup Caption="Epub">
                         <dxb:BarButtonItem Content="Save"
                                            LargeGlyph="{dx:DXImageOffice2013 Image=Save_32x32.png}"
                                            Command="{Binding Save}" />
-                        <dxb:BarButtonItem Content="Cancel"
-                                           LargeGlyph="{dx:DXImage Image=Delete_32x32.png}"
+                        <dxb:BarButtonItem Content="Clear"
+                                           LargeGlyph="{dx:DXImageOffice2013 Image=Clear_32x32.png}"
                                            Command="{Binding CancelChanges}" />
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
