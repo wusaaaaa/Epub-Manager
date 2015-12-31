@@ -33,6 +33,10 @@
                         <dxb:BarButtonItem Content="Clear"
                                            LargeGlyph="{dx:DXImageOffice2013 Image=Clear_32x32.png}"
                                            Command="{Binding CancelChanges}" />
+                        <dxb:BarButtonItem Content="Rename"
+                                           LargeGlyph="{dx:DXImageOffice2013 Image=ChangeFontStyle_32x32.png}"
+                                           Command="{Binding Rename}" />
+                        
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>

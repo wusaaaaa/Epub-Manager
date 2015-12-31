@@ -4,8 +4,10 @@ using DevExpress.Utils;
 using Epub_Manager.Core;
 using Epub_Manager.Core.Services;
 using Epub_Manager.Extensions;
+using Epub_Manager.Views.EpubData.Rename;
 using Epub_Manager.Views.EpubData.Tree;
 using Epub_Manager.Views.Shell;
+using Epub_Manager.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +21,8 @@ namespace Epub_Manager.Views.EpubData
         #region Fields
 
         private readonly IExceptionHandler _exceptionHandler;
+        private readonly IRenameService _renameService;
+        private readonly IWindowManager _windowManager;
 
         private BindableCollection<TreeItemViewModel> _treeItems;
         private FileInfo _file;
@@ -51,16 +55,21 @@ namespace Epub_Manager.Views.EpubData
 
         public AsyncCommand Save { get; }
         public AsyncCommand CancelChanges { get; }
+        public AsyncCommand Rename { get; }
 
         #endregion
 
         #region Ctor
 
-        public EpubDataViewModel(IEnumerable<IEpubDetails> details, IExceptionHandler exceptionHandler)
+        public EpubDataViewModel(IEnumerable<IEpubDetails> details, IExceptionHandler exceptionHandler, IRenameService renameService, IWindowManager windowManager)
         {
             Guard.ArgumentNotNull(exceptionHandler, nameof(exceptionHandler));
+            Guard.ArgumentNotNull(renameService, nameof(renameService));
+            Guard.ArgumentNotNull(windowManager, nameof(windowManager));
 
             this._exceptionHandler = exceptionHandler;
+            this._renameService = renameService;
+            this._windowManager = windowManager;
 
             this.DisplayName = "Epub Data";
 
@@ -71,6 +80,7 @@ namespace Epub_Manager.Views.EpubData
 
             this.Save = new AsyncCommand(this.SaveImpl, this.CanSaveImpl);
             this.CancelChanges = new AsyncCommand(this.CancelChangesImpl);
+            this.Rename = new AsyncCommand(this.RenameImpl, this.CanRenameImpl);
         }
 
         #endregion
@@ -182,6 +192,40 @@ namespace Epub_Manager.Views.EpubData
         {
             return this.ActiveItem.CancelChanges();
         }
+
+        private bool CanRenameImpl()
+        {
+            if (this.File != null)
+                return true;
+
+            return false;
+        }
+
+        private Task RenameImpl()
+        {
+            try
+            {
+                var viewModel = IoC.Get<RenameViewModel>();
+                viewModel.Initialize(this.File);
+
+                var result = this._windowManager.ShowDialog(viewModel, null, WindowSettings.With().AutoSize().NoIcon());
+
+                if (result == true)
+                {
+                    this._renameService.RenameFile(this.File, viewModel.NewName);
+
+                    this.OnActivate();
+                }
+
+                return Task.CompletedTask;
+            }
+            catch (EpubException ex)
+            {
+                this._exceptionHandler.Handle(ex);
+                return Task.CompletedTask;
+            }
+        }
+
         #endregion
     }
 }

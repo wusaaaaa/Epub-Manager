@@ -15,7 +15,8 @@ namespace Epub_Manager.Windsor
                 Component.For<IExceptionHandler>().ImplementedBy<ExceptionHandler>().LifestyleSingleton(),
                 Component.For<ILoadingService>().ImplementedBy<LoadingService>().LifestyleSingleton(),
                 Component.For<IMessageManager>().ImplementedBy<MessageManager>().LifestyleSingleton(),
-                Component.For<IEpubService>().ImplementedBy<EpubService>().LifestyleSingleton()
+                Component.For<IEpubService>().ImplementedBy<EpubService>().LifestyleSingleton(),
+                Component.For<IRenameService>().ImplementedBy<RenameService>().LifestyleSingleton()
                 );
 
             container.AddFacility<MakeEpubExceptionFacility>();
