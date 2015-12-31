@@ -16,9 +16,9 @@ namespace Epub_Manager.Views.EpubData
 {
     public class EpubDataViewModel : Conductor<IEpubDetails>.Collection.OneActive, IShellItem, IHandle<TreeItemSelected>
     {
-        private readonly IExceptionHandler _exceptionHandler;
-
         #region Fields
+
+        private readonly IExceptionHandler _exceptionHandler;
 
         private BindableCollection<TreeItemViewModel> _treeItems;
         private FileInfo _file;
@@ -158,6 +158,9 @@ namespace Epub_Manager.Views.EpubData
 
         private bool CanSaveImpl()
         {
+            if (this.ActiveItem == null)
+                return false;
+
             return this.ActiveItem.CanSave();
         }
 

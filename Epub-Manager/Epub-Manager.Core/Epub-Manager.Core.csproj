@@ -52,6 +52,7 @@
     <Compile Include="Services\ILoadingService.cs" />
     <Compile Include="Services\IMessageManager.cs" />
     <Compile Include="Entites\TableOfContentEntry.cs" />
+    <Compile Include="Services\IRenameService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
